@@ -4,6 +4,7 @@
 
 #include <stdexcept>
 #include "window.hpp"
+#include "components/button.hpp"
 
 ui::Window *ui::Window::windowPtr;
 
@@ -32,7 +33,7 @@ ui::Window::Window(const std::wstring_view &title, HINSTANCE app, unsigned width
 			title.data(),
 			WS_OVERLAPPEDWINDOW, //display mode
 			CW_USEDEFAULT, //pos x
-			0, // pos y
+			CW_USEDEFAULT, // pos y
 			width,
 			height,
 			nullptr, // parent
@@ -47,6 +48,16 @@ ui::Window::Window(const std::wstring_view &title, HINSTANCE app, unsigned width
 	ShowWindow(hwnd, cmd);
 	UpdateWindow(hwnd);
 
+	components.push_back(std::make_unique<Button>([&]() {
+		MessageBeep(MB_ICONERROR);
+		MessageBox(hwnd, L"clicked1", L"title", MB_OK);
+	}, L"button1", vec2u(20, 20), vec2u(100, 20), hwnd, 1));
+
+	components.push_back(std::make_unique<Button>([&]() {
+		MessageBeep(MB_ICONERROR);
+		MessageBox(hwnd, L"clicked2", L"title", MB_OK);
+	}, L"button2", vec2u(20, 50), vec2u(100, 20), hwnd, 2));
+
 	windowPtr = this;
 }
 
@@ -57,10 +68,15 @@ LRESULT ui::Window::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 		case WM_CREATE:
 
 			break;
-		case WM_PAINT:
+		case WM_COMMAND: {
+			Event event(LOWORD(wParam));
+
+			for (int i = 0; i < windowPtr->components.size() && !event.isHandled(); ++i) {
+				windowPtr->components[i]->handleEvent(event);
+			}
+
 			break;
-		case WM_KEYDOWN:
-			break;
+		}
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			break;

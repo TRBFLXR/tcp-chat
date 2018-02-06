@@ -8,6 +8,10 @@
 
 #include <string>
 #include <windows.h>
+#include <vector>
+#include <memory>
+
+#include "components/component.hpp"
 
 namespace ui {
 
@@ -30,6 +34,8 @@ namespace ui {
 
 		HWND hwnd;
 		WNDCLASSEXW wc;
+
+		std::vector<std::unique_ptr<Component>> components;
 
 		std::wstring title;
 	};
