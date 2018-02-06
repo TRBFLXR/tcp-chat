@@ -14,7 +14,9 @@ find_package(Threads REQUIRED)
 set(CLIENT_SRC
         src/client/main.cpp
         src/client/ui/window.cpp
-        src/client/ui/components/button.cpp )
+        src/client/ui/components/button.cpp
+        src/client/ui/components/components.cpp
+        src/client/ui/components/textfield.cpp)
 
 #win32
 add_executable(client_win32 WIN32 ${CLIENT_SRC})

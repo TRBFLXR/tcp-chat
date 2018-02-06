@@ -7,7 +7,6 @@
 
 #include <windows.h>
 
-#include "../../util/event.hpp"
 #include "../../util/types.hpp"
 
 namespace ui {
@@ -15,11 +14,10 @@ namespace ui {
 	class Component {
 	public:
 		explicit Component(const vec2u &position, const vec2u &size, const HWND &parent, WORD id)
-				: parent(parent), id(id), position(position), size(size) { };
-
-		virtual void handleEvent(Event &event) = 0;
+				: handle(nullptr), parent(parent), id(id), position(position), size(size) { };
 
 	protected:
+		HWND handle;
 		HWND parent;
 		WORD id;
 

@@ -8,10 +8,8 @@
 
 #include <string>
 #include <windows.h>
-#include <vector>
-#include <memory>
 
-#include "components/component.hpp"
+#include "components/components.hpp"
 
 namespace ui {
 
@@ -19,7 +17,6 @@ namespace ui {
 	public:
 		explicit Window(const std::wstring_view &title, HINSTANCE app, unsigned width, unsigned height, int cmd);
 		~Window();
-
 
 		inline const HWND &getHwnd() const { return hwnd; }
 		inline const std::wstring &getTitle() const { return title; }
@@ -35,7 +32,7 @@ namespace ui {
 		HWND hwnd;
 		WNDCLASSEXW wc;
 
-		std::vector<std::unique_ptr<Component>> components;
+		Components *components;
 
 		std::wstring title;
 	};
