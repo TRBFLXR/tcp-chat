@@ -1,0 +1,10 @@
+cmake-build-debug
+cmake-build-release
+
+.idea/codeStyles
+.idea/inspectionProfiles
+.idea/dictionaries
+
+.idea/.name
+.idea/workspace.xml
+.idea/dictionaries/Igor.xml
