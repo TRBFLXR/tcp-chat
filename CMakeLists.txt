@@ -10,34 +10,43 @@ add_definitions(-DUNICODE)
 
 find_package(Threads REQUIRED)
 
+#chatillo
+set(CHATILLO_SRC
+        src/chatillo/test.cpp)
+
+add_library(chatillo SHARED ${CHATILLO_SRC})
+
+target_link_libraries(chatillo Threads::Threads)
+
 #client
 set(CLIENT_SRC
         src/client/main.cpp
         src/client/ui/window.cpp
         src/client/ui/components/button.cpp
         src/client/ui/components/components.cpp
-        src/client/ui/components/textfield.cpp)
+        src/client/ui/components/textfield.cpp
+        src/client/ui/components/textarea.cpp)
 
 #win32
 add_executable(client_win32 WIN32 ${CLIENT_SRC})
 
 target_link_libraries(client_win32
-        Threads::Threads
+        chatillo
         ws2_32)
 
 #console sub
 add_executable(client ${CLIENT_SRC})
 
 target_link_libraries(client
-        Threads::Threads
+        chatillo
         ws2_32)
 
 #server
 set(SERVER_SRC
-        src/server/main.cpp)
+        src/server/main.cpp src/chatillo/test.hpp)
 
 add_executable(server ${SERVER_SRC})
 
 target_link_libraries(server
-        Threads::Threads
+        chatillo
         ws2_32)

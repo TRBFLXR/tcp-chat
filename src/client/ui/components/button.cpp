@@ -11,4 +11,6 @@ ui::Button::Button(const std::wstring_view &caption, const vec2u &pos, const vec
 
 	handle = CreateWindow(L"BUTTON", caption.data(), WS_VISIBLE | WS_CHILD | WS_BORDER,
 	             pos.x, pos.y, size.x, size.y, parent, reinterpret_cast<HMENU>(id), nullptr, nullptr);
+
+	setFont(L"Consolas");
 }

@@ -6,7 +6,6 @@
 #define TCP_CHAT_TEXTFIELD_HPP
 
 
-#include <string>
 #include "component.hpp"
 
 namespace ui {

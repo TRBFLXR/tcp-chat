@@ -8,6 +8,7 @@
 
 #include "button.hpp"
 #include "textfield.hpp"
+#include "textarea.hpp"
 
 namespace ui {
 
@@ -18,6 +19,9 @@ namespace ui {
 
 		Button button1;
 		Button button2;
+		Button button3;
+
+		TextArea textArea;
 
 		TextField textField;
 

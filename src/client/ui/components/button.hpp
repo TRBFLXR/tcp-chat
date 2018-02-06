@@ -6,8 +6,6 @@
 #define TCP_CHAT_BUTTON_HPP
 
 
-#include <string>
-
 #include "component.hpp"
 #include "../../util/types.hpp"
 

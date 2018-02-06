@@ -58,9 +58,18 @@ ui::Window::~Window() {
 
 LRESULT ui::Window::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
-		case WM_CREATE:
+		case WM_CREATE: {
+
+			HWND lb = CreateWindowEx(WS_EX_CLIENTEDGE, L"listbox", L"",
+			                         WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_AUTOVSCROLL, 240, 10, 150,
+			                         60, hwnd, nullptr, nullptr, nullptr);
+			SendMessage(lb, LB_ADDSTRING, 0, (LPARAM) L"name");
+
+
+
 
 			break;
+		}
 		case WM_COMMAND: {
 			windowPtr->components->input(LOWORD(wParam));
 			break;
