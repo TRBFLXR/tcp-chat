@@ -10,7 +10,7 @@ std::shared_ptr<Packet> ps::ChatMessage::toPacket() {
 	std::shared_ptr<Packet> p = std::make_shared<Packet>();
 
 	p->append(PacketType::ChatMessage);
-	p->append((int) message.size());
+	p->append((int) message.size() * sizeof(wchar_t));
 	p->append(message);
 
 	return p;

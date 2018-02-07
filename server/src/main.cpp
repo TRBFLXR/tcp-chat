@@ -12,7 +12,7 @@ int main() {
 	_setmode(_fileno(stdin), _O_U16TEXT);
 	_setmode(_fileno(stderr), _O_U16TEXT);
 
-	printf("server\n");
+	wprintf(L"server\n");
 
 	Server server(1111);
 	while (true) {

@@ -11,7 +11,7 @@ Server::Server(uint16_t port, bool loopBackToLH) : idCounter(0), terminateThread
 	WORD dllVersion = MAKEWORD(2, 1);
 
 	if (WSAStartup(dllVersion, &wsaData) != 0) {
-		fprintf(stderr, "Winsock startup failed\n");
+		fwprintf(stderr, L"Winsock startup failed\n");
 
 		system("pause");
 		exit(EXIT_FAILURE);
@@ -23,13 +23,13 @@ Server::Server(uint16_t port, bool loopBackToLH) : idCounter(0), terminateThread
 
 	listener = socket(AF_INET, SOCK_STREAM, 0);
 	if (bind(listener, reinterpret_cast<SOCKADDR *>(&addr), sizeof(addr)) == SOCKET_ERROR) {
-		fprintf(stderr, "Failed to bind socket. Winsock err: %i\n", WSAGetLastError());
+		fwprintf(stderr, L"Failed to bind socket. Winsock err: %i\n", WSAGetLastError());
 
 		system("pause");
 		exit(EXIT_FAILURE);
 	}
 	if (listen(listener, SOMAXCONN) == SOCKET_ERROR) {
-		fprintf(stderr, "Failed to listen on socket. Winsock err: %i\n", WSAGetLastError());
+		fwprintf(stderr, L"Failed to listen on socket. Winsock err: %i\n", WSAGetLastError());
 
 		system("pause");
 		exit(EXIT_FAILURE);
@@ -52,7 +52,7 @@ bool Server::listenConnection() {
 	SOCKET connectionSocket = accept(listener, reinterpret_cast<SOCKADDR *>(&addr), &addrSize);
 
 	if (!connectionSocket) {
-		fprintf(stderr, "Failed to accept connection.\n");
+		fwprintf(stderr, L"Failed to accept connection.\n");
 		return false;
 	}
 
@@ -64,7 +64,7 @@ bool Server::listenConnection() {
 	connection->id = idCounter;
 	++idCounter;
 
-	printf("Client connected id:%i\n", connection->id);
+	wprintf(L"Client connected id:%i\n", connection->id);
 
 	std::thread clientThread(clientHandlerThread, std::ref(*this), connection);
 	clientThread.detach();
@@ -81,8 +81,8 @@ void Server::disconnect(std::shared_ptr<Connection> &connection) {
 
 	connections.erase(std::remove(connections.begin(), connections.end(), connection));
 
-	printf("Cleaned up client %i\n", connection->id);
-	printf("Total connections: %llu\n", connections.size());
+	wprintf(L"Cleaned up client %i\n", connection->id);
+	wprintf(L"Total connections: %llu\n", connections.size());
 }
 
 void Server::clientHandlerThread(Server &server, std::shared_ptr<Connection> connection) {
@@ -94,7 +94,7 @@ void Server::clientHandlerThread(Server &server, std::shared_ptr<Connection> con
 		if (!server.processPacket(connection, packetType)) break;
 	}
 
-	printf("Client disconnected (id:%i)\n", connection->id);
+	wprintf(L"Client disconnected (id:%i)\n", connection->id);
 	server.disconnect(connection);
 }
 
@@ -107,13 +107,13 @@ void Server::packetSenderThread(Server &server) {
 			if (c->pm.hasPackets()) {
 				std::shared_ptr<Packet> p = c->pm.pop();
 				if (!server.sendAll(c, p->getBuffer().data(), (int) p->getBuffer().size())) {
-					fprintf(stderr, "Failed to send packet to id:%i\n", c->id);
+					fwprintf(stderr, L"Failed to send packet to id:%i\n", c->id);
 				}
 			}
 		}
 		Sleep(5);
 	}
-	printf("Ending packet sending thread...\n");
+	wprintf(L"Ending packet sending thread...\n");
 }
 
 bool Server::sendAll(std::shared_ptr<Connection> &connection, const char *data, const int size) {
@@ -155,7 +155,7 @@ bool Server::getString(std::shared_ptr<Connection> &connection, std::wstring &st
 	if (!getInt(connection, bufferSize)) return false;
 	if (bufferSize == 0) return true;
 
-	str.resize((size_t) bufferSize);
+	str.resize((size_t) bufferSize / sizeof(wchar_t));
 
 	return receiveAll(connection, reinterpret_cast<char *>(str.data()), bufferSize);
 }
@@ -180,7 +180,7 @@ bool Server::processPacket(std::shared_ptr<Connection> &connection, PacketType p
 			break;
 		}
 		default:
-			fprintf(stderr, "Unrecognized packet: %i\n", packetType);
+			fwprintf(stderr, L"Unrecognized packet: %i\n", packetType);
 			return false;
 	}
 

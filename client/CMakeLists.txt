@@ -8,11 +8,12 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast")
 
 add_definitions(-DUNICODE)
 
-link_directories(../chatillo)
+include_directories(../chatillo/include)
 link_libraries(chatillo)
 
 #client
 set(CLIENT_SRC
+        src/client.cpp
         src/main.cpp
         src/ui/window.cpp
         src/ui/components/button.cpp
