@@ -7,14 +7,16 @@
 
 #include <string>
 #include <vector>
-#include "packettype.hpp"
+#include <memory>
+
+#include <packettype.hpp>
 
 class Packet {
 public:
 	explicit Packet() = default;
 	explicit Packet(const char *buffer, int size);
 	explicit Packet(const PacketType &packetType);
-	Packet(const Packet &other);
+	Packet(const std::shared_ptr<Packet> &other);
 
 	void append(const PacketType &packetType);
 	void append(int value);

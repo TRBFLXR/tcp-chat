@@ -5,7 +5,6 @@
 #ifndef TCP_CHAT_PACKETTYPE_HPP
 #define TCP_CHAT_PACKETTYPE_HPP
 
-
 enum class PacketType {
 	ChatMessage,
 	RequestFile,

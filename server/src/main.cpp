@@ -4,7 +4,8 @@
 
 #include <cstdio>
 #include <fcntl.h>
-#include "../../chatillo/src/packet.hpp"
+
+#include "server.hpp"
 
 int main() {
 	_setmode(_fileno(stdout), _O_U16TEXT);
@@ -13,17 +14,11 @@ int main() {
 
 	printf("server\n");
 
-	Packet p;
-	p.append(L"1234567890");
-	p.append(L"ауе");
-	p.append(123);
+	Server server(1111);
+	while (true) {
+		server.listenConnection();
+	}
 
-	auto &b = p.getBuffer();
-
-	wprintf(L"size:%llu\n", b.size());
-	wprintf(L"%ls\n", (wchar_t *) b.data());
-
-
-//	system("pause");
+	system("pause");
 	return EXIT_SUCCESS;
 }

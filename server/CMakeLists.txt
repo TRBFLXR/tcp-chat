@@ -6,11 +6,12 @@ set(CMAKE_CXX_FLAGS "-static-libgcc -static-libstdc++ -std=c++17")
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast")
 
-link_directories(../chatillo)
+include_directories(../chatillo/include)
 link_libraries(chatillo)
 
 #server
 set(SERVER_SRC
-        src/main.cpp)
+        src/main.cpp
+        src/server.cpp)
 
 add_executable(server ${SERVER_SRC})

@@ -3,6 +3,7 @@
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
   <component name="CidrRootsConfiguration">
     <sourceRoots>
+      <file path="$PROJECT_DIR$/chatillo/include" />
       <file path="$PROJECT_DIR$/chatillo/src" />
       <file path="$PROJECT_DIR$/client/src" />
       <file path="$PROJECT_DIR$/server/src" />

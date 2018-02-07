@@ -3,7 +3,7 @@
 //
 
 #include <winsock2.h>
-#include "packet.hpp"
+#include <packet.hpp>
 
 Packet::Packet(const char *buffer, int size) {
 	append(buffer, size);
@@ -13,8 +13,9 @@ Packet::Packet(const PacketType &packetType) {
 	append(packetType);
 }
 
-Packet::Packet(const Packet &other)  {
-	append(other.buffer.data(), (int)other.buffer.size());
+
+Packet::Packet(const std::shared_ptr<Packet> &other) {
+	append(other->buffer.data(), (int)other->buffer.size());
 }
 
 void Packet::append(const PacketType &packetType) {
