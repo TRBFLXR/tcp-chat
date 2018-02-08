@@ -9,14 +9,14 @@
 
 class Socket {
 protected:
-	bool sendAll(std::shared_ptr<Connection> &connection, const char *data, int size);
-	bool receiveAll(std::shared_ptr<Connection> &connection, char *data, int size);
+	bool sendAll(const Connection &connection, const char *data, int size) const;
+	bool receiveAll(const Connection &connection, char *data, int size) const;
 
-	bool getInt(std::shared_ptr<Connection> &connection, int &value);
-	bool getPacketType(std::shared_ptr<Connection> &connection, PacketType &packetType);
-	bool getString(std::shared_ptr<Connection> &connection, std::wstring &str);
+	bool getInt(const Connection &connection, int &value) const;
+	bool getPacketType(const Connection &connection, PacketType &packetType) const;
+	bool getString(const Connection &connection, std::wstring &str) const;
 
-	virtual bool processPacket(std::shared_ptr<Connection> &connection, PacketType packetType) = 0;
+	virtual bool processPacket(const Connection &connection, PacketType packetType) = 0;
 };
 
 

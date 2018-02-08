@@ -12,7 +12,7 @@ namespace ui {
 
 	class TextField : public Component {
 	public:
-		explicit TextField(const std::wstring_view &text, const vec2u &pos, const vec2u &size, const HWND &parent, WORD id);
+		explicit TextField(const std::wstring_view &name, const vec2u &pos, const vec2u &size, const HWND &parent, WORD id);
 
 		inline int setText(const std::wstring_view &text) const { SetWindowText(handle, text.data()); }
 		std::wstring getText() const;

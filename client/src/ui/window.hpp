@@ -8,7 +8,6 @@
 
 #include <string>
 #include <windows.h>
-
 #include "components/components.hpp"
 
 namespace ui {

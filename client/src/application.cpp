@@ -7,6 +7,11 @@
 Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned width, unsigned height, int cmd) :
 		window(this, title, app, width, height, cmd) {
 
+	client.connectToServer("109.87.123.75", 1111);
+}
+
+Application::~Application() {
+	client.disconnect();
 }
 
 int Application::run() {

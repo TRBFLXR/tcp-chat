@@ -25,9 +25,7 @@ ui::Window::Window(Application *application, const std::wstring_view &title,
 	wc.hbrBackground = (HBRUSH) GetStockObject(WHITE_BRUSH);
 	wc.hInstance = app;
 
-	if (!RegisterClassExW(&wc)) {
-		throw std::runtime_error("Unable to register class");
-	}
+	if (!RegisterClassExW(&wc)) throw std::runtime_error("Unable to register class");
 
 	hwnd = CreateWindowW(
 			L"MainWindow",
@@ -42,9 +40,7 @@ ui::Window::Window(Application *application, const std::wstring_view &title,
 			HINSTANCE(app),
 			nullptr);
 
-	if (!hwnd) {
-		throw std::runtime_error("Unable to create window");
-	}
+	if (!hwnd) throw std::runtime_error("Unable to create window");
 
 	ShowWindow(hwnd, cmd);
 	UpdateWindow(hwnd);
@@ -68,7 +64,7 @@ LRESULT ui::Window::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 			break;
 
 		case WM_DESTROY:
-			PostQuitMessage(0);
+			PostQuitMessage(EXIT_SUCCESS);
 			break;
 
 		default:

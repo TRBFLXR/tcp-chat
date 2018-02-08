@@ -21,10 +21,10 @@ public:
 	bool listenConnection();
 
 private:
-	bool processPacket(std::shared_ptr<Connection> &connection, PacketType packetType) override ;
+	bool processPacket(const Connection &connection, PacketType packetType) override ;
 
-	static void clientHandlerThread(Server &server, std::shared_ptr<Connection> connection);
-	static void packetSenderThread(Server &server);
+	static void clientHandlerThread(Server *server, std::shared_ptr<Connection> connection);
+	static void packetSenderThread(Server *server);
 
 	void disconnect(std::shared_ptr<Connection> &connection);
 

@@ -13,18 +13,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int sh
 	_setmode(_fileno(stdin), _O_U16TEXT);
 	_setmode(_fileno(stderr), _O_U16TEXT);
 
-	Application *app;
 	int exit = 0;
 
 	try {
-		app = new Application(L"test тест", hInst, 800, 600, showCmd);
-		exit = app->run();
+		Application app(L"test тест", hInst, 800, 600, showCmd);
+		exit = app.run();
 	} catch (std::exception &ex) {
-		MessageBox(app->getWindow().getHwnd(), reinterpret_cast<LPCWSTR>(ex.what()), L"Error", MB_OK | MB_ICONERROR);
-		delete app;
+		MessageBox(nullptr, reinterpret_cast<LPCWSTR>(ex.what()), L"Error", MB_OK | MB_ICONERROR);
 	}
-
-	delete app;
 
 	return exit;
 }

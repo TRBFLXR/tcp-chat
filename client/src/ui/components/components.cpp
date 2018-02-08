@@ -2,8 +2,8 @@
 // Created by Igor on 2/6/2018.
 //
 
-#include "components.hpp"
 #include "../../application.hpp"
+#include "components.hpp"
 
 ui::Components::Components(Application *app) :
 		app(app) {
@@ -29,9 +29,10 @@ ui::Components::~Components() {
 void ui::Components::input(WORD id) {
 	switch (id) {
 		case 1:
-			textField->setText(L"Test text");
+			textField->setText(L"Test жопа");
 			break;
 		case 2:
+			app->getClient().sendString(textField->getText());
 			break;
 		case 3:
 //			textArea.append(textField.getText() + L"\n");

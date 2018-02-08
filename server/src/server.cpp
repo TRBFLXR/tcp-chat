@@ -17,7 +17,7 @@ Server::Server(uint16_t port, bool loopBackToLH) : idCounter(0), terminateThread
 		exit(EXIT_FAILURE);
 	}
 
-	addr.sin_addr.s_addr = loopBackToLH ? htonl(INADDR_ANY) : inet_addr("127.0.0.1");
+	addr.sin_addr.s_addr = loopBackToLH ? inet_addr("127.0.0.1") : htonl(INADDR_ANY);
 	addr.sin_port = htons(port);
 	addr.sin_family = AF_INET;
 
@@ -35,7 +35,7 @@ Server::Server(uint16_t port, bool loopBackToLH) : idCounter(0), terminateThread
 		exit(EXIT_FAILURE);
 	}
 
-	std::thread packetSender(packetSenderThread, std::ref(*this));
+	std::thread packetSender(packetSenderThread, this);
 	packetSender.detach();
 	threads.push_back(&packetSender);
 }
@@ -66,7 +66,7 @@ bool Server::listenConnection() {
 
 	wprintf(L"Client connected id:%i\n", connection->id);
 
-	std::thread clientThread(clientHandlerThread, std::ref(*this), connection);
+	std::thread clientThread(clientHandlerThread, this, connection);
 	clientThread.detach();
 	threads.push_back(&clientThread);
 
@@ -85,28 +85,28 @@ void Server::disconnect(std::shared_ptr<Connection> &connection) {
 	wprintf(L"Total connections: %llu\n", connections.size());
 }
 
-void Server::clientHandlerThread(Server &server, std::shared_ptr<Connection> connection) {
+void Server::clientHandlerThread(Server *server, std::shared_ptr<Connection> connection) {
 	PacketType packetType{ };
 
 	while (true) {
-		if (server.terminateThreads) break;
-		if (!server.getPacketType(connection, packetType)) break;
-		if (!server.processPacket(connection, packetType)) break;
+		if (server->terminateThreads) break;
+		if (!server->getPacketType(*connection, packetType)) break;
+		if (!server->processPacket(*connection, packetType)) break;
 	}
 
 	wprintf(L"Client disconnected (id:%i)\n", connection->id);
-	server.disconnect(connection);
+	server->disconnect(connection);
 }
 
-void Server::packetSenderThread(Server &server) {
+void Server::packetSenderThread(Server *server) {
 	while (true) {
-		if (server.terminateThreads) break;
+		if (server->terminateThreads) break;
 
-		std::shared_lock<std::shared_mutex> lock(server.connectionMutex);
-		for (auto &&c : server.connections) {
+		std::shared_lock<std::shared_mutex> lock(server->connectionMutex);
+		for (auto &&c : server->connections) {
 			if (c->pm.hasPackets()) {
 				std::shared_ptr<Packet> p = c->pm.pop();
-				if (!server.sendAll(c, p->getBuffer().data(), (int) p->getBuffer().size())) {
+				if (!server->sendAll(*c, p->getBuffer().data(), (int) p->getBuffer().size())) {
 					fwprintf(stderr, L"Failed to send packet to id:%i\n", c->id);
 				}
 			}
@@ -116,7 +116,7 @@ void Server::packetSenderThread(Server &server) {
 	wprintf(L"Ending packet sending thread...\n");
 }
 
-bool Server::processPacket(std::shared_ptr<Connection> &connection, PacketType packetType) {
+bool Server::processPacket(const Connection &connection, PacketType packetType) {
 	switch (packetType) {
 		case PacketType::ChatMessage: {
 			std::wstring message;
@@ -127,12 +127,12 @@ bool Server::processPacket(std::shared_ptr<Connection> &connection, PacketType p
 			{
 				std::shared_lock<std::shared_mutex> lock(connectionMutex);
 				for (auto &&c : connections) {
-					if (c == connection) continue;
+					if (c->id == connection.id) continue;
 
 					c->pm.push(msgPacket);
 				}
 			}
-			wprintf(L"Processed chat message packet from user(%i): %ls\n", connection->id, message.c_str());
+			wprintf(L"Processed chat message packet from user(%i): %ls\n", connection.id, message.c_str());
 			break;
 		}
 		default:
