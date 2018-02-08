@@ -5,6 +5,7 @@
 #ifndef TCP_CHAT_APPLICATION_HPP
 #define TCP_CHAT_APPLICATION_HPP
 
+#include <packetstructure.hpp>
 #include "client.hpp"
 #include "ui/window.hpp"
 
@@ -18,7 +19,11 @@ public:
 	inline const ui::Window &getWindow() const { return window; }
 	inline const Client &getClient() const { return client; }
 
+	static void handleChatMessage(const std::wstring &sender, const std::wstring &message);
+
 private:
+	static Application *appPtr;
+
 	MSG msg;
 
 	Client client;

@@ -8,6 +8,8 @@
 #include <string>
 #include <thread>
 #include <socket.hpp>
+#include <functional>
+#include <utility>
 
 class Client : public Socket {
 public:
@@ -17,7 +19,11 @@ public:
 	bool connectToServer(const std::string_view &ip, uint16_t port);
 	void disconnect();
 
-	void sendString(const std::wstring_view &str)  const;
+	void sendString(const std::wstring_view &str) const;
+
+	inline void setChatMessageCallback(std::function<void(const std::wstring &, const std::wstring &)> callback) {
+		chatMessageCallback = std::move(callback);
+	}
 
 private:
 	bool closeConnection();
@@ -36,6 +42,8 @@ private:
 
 	std::thread packetSenderThread;
 	std::thread clientThread;
+
+	std::function<void(const std::wstring &, const std::wstring &)> chatMessageCallback;
 };
 
 

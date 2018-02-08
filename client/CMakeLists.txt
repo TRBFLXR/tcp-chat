@@ -13,14 +13,14 @@ link_libraries(chatillo)
 
 #client
 set(CLIENT_SRC
-        src/application.cpp
         src/client.cpp
         src/main.cpp
         src/ui/window.cpp
         src/ui/components/button.cpp
         src/ui/components/components.cpp
         src/ui/components/textfield.cpp
-        src/ui/components/textarea.cpp)
+        src/ui/components/textarea.cpp
+        src/application.cpp)
 
 #win32
 add_executable(client_win32 WIN32 ${CLIENT_SRC})

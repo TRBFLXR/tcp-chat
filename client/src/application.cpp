@@ -4,10 +4,16 @@
 
 #include "application.hpp"
 
+Application *Application::appPtr;
+
 Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned width, unsigned height, int cmd) :
 		window(this, title, app, width, height, cmd) {
 
+	client.setChatMessageCallback(handleChatMessage);
+
 	client.connectToServer("109.87.123.75", 1111);
+
+	appPtr = this;
 }
 
 Application::~Application() {
@@ -21,4 +27,8 @@ int Application::run() {
 	}
 
 	return static_cast<int>(msg.wParam);
+}
+
+void Application::handleChatMessage(const std::wstring &sender, const std::wstring &message) {
+	appPtr->window.getComponents()->textArea->append(sender + L" :" + message + L"\n");
 }

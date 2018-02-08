@@ -20,6 +20,7 @@ namespace ui {
 
 		inline const HWND &getHwnd() const { return hwnd; }
 		inline const std::wstring &getTitle() const { return title; }
+		inline Components *getComponents() { return components; }
 
 		void setTitle(const std::wstring_view &title);
 

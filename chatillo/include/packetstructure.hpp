@@ -17,6 +17,7 @@ namespace ps {
 
 		std::shared_ptr<Packet> toPacket();
 
+		std::wstring sender;
 		std::wstring message;
 	};
 

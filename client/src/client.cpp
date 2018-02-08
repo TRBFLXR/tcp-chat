@@ -112,6 +112,8 @@ bool Client::processPacket(const Connection &connection, PacketType packetType) 
 			std::wstring message;
 			if (!getString(connection, message)) return false;
 
+			chatMessageCallback(L"test_sender", message);
+
 			wprintf(L"%ls\n", message.c_str());
 
 			break;
