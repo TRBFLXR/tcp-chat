@@ -11,9 +11,9 @@
 #include <shared_mutex>
 #include <thread>
 
-#include <connection.hpp>
+#include <socket.hpp>
 
-class Server {
+class Server : public Socket{
 public:
 	explicit Server(uint16_t port, bool loopBackToLH = false);
 	~Server();
@@ -21,14 +21,7 @@ public:
 	bool listenConnection();
 
 private:
-	bool sendAll(std::shared_ptr<Connection> &connection, const char *data, int size);
-	bool receiveAll(std::shared_ptr<Connection> &connection, char *data, int size);
-
-	bool getInt(std::shared_ptr<Connection> &connection, int &value);
-	bool getPacketType(std::shared_ptr<Connection> &connection, PacketType &packetType);
-	bool getString(std::shared_ptr<Connection> &connection, std::wstring &str);
-
-	bool processPacket(std::shared_ptr<Connection> &connection, PacketType packetType);
+	bool processPacket(std::shared_ptr<Connection> &connection, PacketType packetType) override ;
 
 	static void clientHandlerThread(Server &server, std::shared_ptr<Connection> connection);
 	static void packetSenderThread(Server &server);

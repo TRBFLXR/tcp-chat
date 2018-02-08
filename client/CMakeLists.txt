@@ -13,6 +13,7 @@ link_libraries(chatillo)
 
 #client
 set(CLIENT_SRC
+        src/application.cpp
         src/client.cpp
         src/main.cpp
         src/ui/window.cpp

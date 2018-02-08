@@ -13,9 +13,10 @@
 
 namespace ui {
 
-	class Window final {
+	class Window {
 	public:
-		explicit Window(const std::wstring_view &title, HINSTANCE app, unsigned width, unsigned height, int cmd);
+		explicit Window(Application *application, const std::wstring_view &title,
+		                HINSTANCE app, unsigned width, unsigned height, int cmd);
 		~Window();
 
 		inline const HWND &getHwnd() const { return hwnd; }
@@ -29,10 +30,12 @@ namespace ui {
 	private:
 		static Window *windowPtr;
 
-		HWND hwnd;
-		WNDCLASSEXW wc;
+		Application *application;
 
 		Components *components;
+
+		HWND hwnd;
+		WNDCLASSEXW wc;
 
 		std::wstring title;
 	};

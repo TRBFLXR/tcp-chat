@@ -7,7 +7,9 @@
 
 ui::Window *ui::Window::windowPtr;
 
-ui::Window::Window(const std::wstring_view &title, HINSTANCE app, unsigned width, unsigned height, int cmd) :
+ui::Window::Window(Application *application, const std::wstring_view &title,
+                   HINSTANCE app, unsigned width, unsigned height, int cmd) :
+		application(application),
 		title(title) {
 
 	wc.cbSize = sizeof(wc);
@@ -47,7 +49,7 @@ ui::Window::Window(const std::wstring_view &title, HINSTANCE app, unsigned width
 	ShowWindow(hwnd, cmd);
 	UpdateWindow(hwnd);
 
-	components = new Components(hwnd);
+	components = new Components(application);
 
 	windowPtr = this;
 }
@@ -58,25 +60,17 @@ ui::Window::~Window() {
 
 LRESULT ui::Window::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
-		case WM_CREATE: {
-
-			HWND lb = CreateWindowEx(WS_EX_CLIENTEDGE, L"listbox", L"",
-			                         WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_AUTOVSCROLL, 240, 10, 150,
-			                         60, hwnd, nullptr, nullptr, nullptr);
-			SendMessage(lb, LB_ADDSTRING, 0, (LPARAM) L"name");
-
-
-
-
+		case WM_CREATE:
 			break;
-		}
-		case WM_COMMAND: {
+
+		case WM_COMMAND:
 			windowPtr->components->input(LOWORD(wParam));
 			break;
-		}
+
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			break;
+
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 	}

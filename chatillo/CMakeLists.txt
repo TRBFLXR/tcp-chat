@@ -12,7 +12,8 @@ include_directories(include)
 set(CHATILLO_SRC
         src/packet.cpp
         src/packetmanager.cpp
-        src/packetstructure.cpp)
+        src/packetstructure.cpp
+        src/socket.cpp)
 
 add_library(chatillo SHARED ${CHATILLO_SRC})
 target_link_libraries(chatillo Threads::Threads ws2_32)

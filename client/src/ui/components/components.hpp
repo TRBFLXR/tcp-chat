@@ -10,23 +10,26 @@
 #include "textfield.hpp"
 #include "textarea.hpp"
 
+class Application;
+
 namespace ui {
 
 	struct Components {
-		explicit Components(const HWND &parent);
+		explicit Components(Application * app);
+		~Components();
 
 		void input(WORD id);
 
-		Button button1;
-		Button button2;
-		Button button3;
+		Button *button1;
+		Button *button2;
+		Button *button3;
 
-		TextArea textArea;
+		TextArea *textArea;
 
-		TextField textField;
+		TextField *textField;
 
 	private:
-		HWND parent;
+		Application * app;
 	};
 
 }

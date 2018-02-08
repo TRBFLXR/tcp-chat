@@ -8,10 +8,9 @@
 #include <winsock2.h>
 #include <string>
 #include <thread>
-#include <packetmanager.hpp>
+#include <socket.hpp>
 
-
-class Client {
+class Client : public Socket {
 public:
 	explicit Client(const std::string_view &ip, uint16_t port);
 	~Client();
@@ -23,25 +22,18 @@ public:
 
 private:
 	bool closeConnection();
-	bool processPacket(PacketType packetType);
+	bool processPacket(std::shared_ptr<Connection> &connection, PacketType packetType) override;
 
 	static void clientThreadFunc(Client &client);
 	static void packetSenderThreadFunc(Client &client);
-
-	bool sendAll(const char *data, int dataSize);
-	bool receiveAll(char *data, int dataSize);
-
-	bool getInt(int &value);
-	bool getPacketType(PacketType &packetType);
-	bool getString(std::wstring &str);
 
 private:
 	bool terminateThreads;
 	bool isConnected;
 
-	SOCKET connection;
+	std::shared_ptr<Connection> connection;
+
 	SOCKADDR_IN addr;
-	PacketManager pm;
 
 	std::thread packetSenderThread;
 	std::thread clientThread;
