@@ -18,8 +18,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int sh
 	try {
 		Application app(L"test тест", hInst, 800, 600, showCmd);
 		exit = app.run();
-	} catch (std::exception &ex) {
-		MessageBox(nullptr, reinterpret_cast<LPCWSTR>(ex.what()), L"Error", MB_OK | MB_ICONERROR);
+
+	} catch (const std::exception &ex) {
+		const char *err = ex.what();
+		size_t size = strlen(err);
+
+		std::wstring w_err(size, L'#');
+		mbstowcs(&w_err[0], err , size);
+
+		MessageBox(nullptr, w_err.c_str(), L"Error", MB_OK | MB_ICONERROR);
 	}
 
 	return exit;

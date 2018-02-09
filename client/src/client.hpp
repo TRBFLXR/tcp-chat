@@ -21,7 +21,7 @@ public:
 
 	void sendString(const std::wstring_view &str) const;
 
-	inline void setName(const std::wstring_view &name) { connection.name = name; }
+	inline bool connected() const { return isConnected; }
 
 	inline void setChatMessageCallback(std::function<void(const std::wstring &, const std::wstring &)> callback) {
 		chatMessageCallback = std::move(callback);

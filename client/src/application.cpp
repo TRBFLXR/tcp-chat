@@ -3,19 +3,32 @@
 //
 
 #include "application.hpp"
+#include "config.hpp"
+#include "ui/components/textarea.hpp"
 
 Application *Application::appPtr;
 
 Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned width, unsigned height, int cmd) :
 		window(this, title, app, width, height, cmd) {
 
-	client.setChatMessageCallback(handleChatMessage);
+	client = new Client();
+
+	client->setChatMessageCallback(handleChatMessage);
+
+	Config config;
+	if (Config::load(config)) {
+		client->connectToServer(config.name, config.ip, config.port);
+	} else {
+
+	}
 
 	appPtr = this;
 }
 
 Application::~Application() {
-	client.disconnect();
+	client->disconnect();
+
+	delete client;
 }
 
 int Application::run() {
@@ -28,5 +41,5 @@ int Application::run() {
 }
 
 void Application::handleChatMessage(const std::wstring &message, const std::wstring &sender) {
-	appPtr->window.getComponents()->textArea->append(sender + L": " + message + L"\n");
+	((ui::TextArea &) appPtr->window.get("textArea1")).append(sender + L": " + message + L"\n");
 }

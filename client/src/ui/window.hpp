@@ -8,30 +8,28 @@
 
 #include <string>
 #include <windows.h>
-#include "components/components.hpp"
+#include "components/component.hpp"
+#include "components.hpp"
 
 namespace ui {
 
 	class Window {
 	public:
-		explicit Window(Application *application, const std::wstring_view &title,
-		                HINSTANCE app, unsigned width, unsigned height, int cmd);
-		~Window();
+		explicit Window(Application *application, const std::wstring_view &title, const std::wstring_view &className,
+		                WNDPROC proc, HINSTANCE app, unsigned width, unsigned height, int cmd);
+
+		virtual ~Window();
+
+		virtual void setupComponents() = 0;
 
 		inline const HWND &getHwnd() const { return hwnd; }
 		inline const std::wstring &getTitle() const { return title; }
-		inline Components *getComponents() { return components; }
+		Component &get(const std::string_view &componentName) { return components->get(componentName); }
 
 		void setTitle(const std::wstring_view &title);
 
-	private:
-		static LRESULT CALLBACK inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-	private:
-		static Window *windowPtr;
-
+	protected:
 		Application *application;
-
 		Components *components;
 
 		HWND hwnd;

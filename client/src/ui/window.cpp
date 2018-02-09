@@ -5,18 +5,16 @@
 #include <stdexcept>
 #include "window.hpp"
 
-ui::Window *ui::Window::windowPtr;
-
-ui::Window::Window(Application *application, const std::wstring_view &title,
-                   HINSTANCE app, unsigned width, unsigned height, int cmd) :
+ui::Window::Window(Application *application, const std::wstring_view &title, const std::wstring_view &className,
+                   WNDPROC proc, HINSTANCE app, unsigned width, unsigned height, int cmd) :
 		application(application),
 		title(title) {
 
 	wc.cbSize = sizeof(wc);
 	wc.style = CS_HREDRAW | CS_VREDRAW;
-	wc.lpfnWndProc = inputProcessor;
+	wc.lpfnWndProc = proc;
 	wc.lpszMenuName = nullptr;
-	wc.lpszClassName = L"MainWindow";
+	wc.lpszClassName = className.data();
 	wc.cbWndExtra = 0;
 	wc.cbClsExtra = 0;
 	wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
@@ -28,7 +26,7 @@ ui::Window::Window(Application *application, const std::wstring_view &title,
 	if (!RegisterClassExW(&wc)) throw std::runtime_error("Unable to register class");
 
 	hwnd = CreateWindowW(
-			L"MainWindow",
+			className.data(),
 			title.data(),
 			WS_OVERLAPPEDWINDOW, //display mode
 			CW_USEDEFAULT, //pos x
@@ -44,32 +42,10 @@ ui::Window::Window(Application *application, const std::wstring_view &title,
 
 	ShowWindow(hwnd, cmd);
 	UpdateWindow(hwnd);
-
-	components = new Components(application);
-
-	windowPtr = this;
 }
 
 ui::Window::~Window() {
 	delete components;
-}
-
-LRESULT ui::Window::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-	switch (msg) {
-		case WM_CREATE:
-			break;
-
-		case WM_COMMAND:
-			windowPtr->components->input(LOWORD(wParam));
-			break;
-
-		case WM_DESTROY:
-			PostQuitMessage(EXIT_SUCCESS);
-			break;
-
-		default:
-			return DefWindowProc(hwnd, msg, wParam, lParam);
-	}
 }
 
 void ui::Window::setTitle(const std::wstring_view &title) {

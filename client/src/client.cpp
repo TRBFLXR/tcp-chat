@@ -46,12 +46,16 @@ bool Client::connectToServer(const std::wstring_view &name, const std::string_vi
 	ps::Register reg(name);
 	connection.pm.push(reg.toPacket());
 
+	isConnected = true;
+
 	return true;
 }
 
 void Client::disconnect() {
 	connection.pm.clear();
 	closesocket(connection.socket);
+
+	isConnected = false;
 
 	wprintf(L"Disconnected\n");
 }
