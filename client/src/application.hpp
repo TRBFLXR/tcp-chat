@@ -17,7 +17,7 @@ public:
 	int run();
 
 	inline const ui::Window &getWindow() const { return window; }
-	inline const Client &getClient() const { return client; }
+	inline Client &getClient() { return client; }
 
 	static void handleChatMessage(const std::wstring &sender, const std::wstring &message);
 

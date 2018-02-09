@@ -6,7 +6,9 @@
 #define TCP_CHAT_PACKETTYPE_HPP
 
 enum class PacketType {
+	Register,
 	ChatMessage,
+	ServerChatMessage,
 	RequestFile,
 	FileBuffer,
 	NextFileBuffer,

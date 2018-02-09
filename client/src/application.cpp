@@ -11,8 +11,6 @@ Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned
 
 	client.setChatMessageCallback(handleChatMessage);
 
-	client.connectToServer("109.87.123.75", 1111);
-
 	appPtr = this;
 }
 
@@ -29,6 +27,6 @@ int Application::run() {
 	return static_cast<int>(msg.wParam);
 }
 
-void Application::handleChatMessage(const std::wstring &sender, const std::wstring &message) {
-	appPtr->window.getComponents()->textArea->append(sender + L" :" + message + L"\n");
+void Application::handleChatMessage(const std::wstring &message, const std::wstring &sender) {
+	appPtr->window.getComponents()->textArea->append(sender + L": " + message + L"\n");
 }

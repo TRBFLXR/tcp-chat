@@ -16,10 +16,12 @@ public:
 	explicit Client();
 	~Client();
 
-	bool connectToServer(const std::string_view &ip, uint16_t port);
+	bool connectToServer(const std::wstring_view &name, const std::string_view &ip, uint16_t port);
 	void disconnect();
 
 	void sendString(const std::wstring_view &str) const;
+
+	inline void setName(const std::wstring_view &name) { connection.name = name; }
 
 	inline void setChatMessageCallback(std::function<void(const std::wstring &, const std::wstring &)> callback) {
 		chatMessageCallback = std::move(callback);

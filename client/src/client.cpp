@@ -21,12 +21,13 @@ Client::~Client() {
 	}
 }
 
-bool Client::connectToServer(const std::string_view &ip, uint16_t port) {
+bool Client::connectToServer(const std::wstring_view &name, const std::string_view &ip, uint16_t port) {
 	addr.sin_addr.s_addr = inet_addr(ip.data());
 	addr.sin_port = htons(port);
 	addr.sin_family = AF_INET;
 
 	connection.id = 0;
+	connection.name = name;
 	connection.socket = socket(AF_INET, SOCK_STREAM, 0);
 
 	int addrSize = sizeof(addr);
@@ -41,6 +42,9 @@ bool Client::connectToServer(const std::string_view &ip, uint16_t port) {
 
 	clientThread = std::thread(clientThreadFunc, this);
 	clientThread.detach();
+
+	ps::Register reg(name);
+	connection.pm.push(reg.toPacket());
 
 	return true;
 }
@@ -108,11 +112,13 @@ void Client::packetSenderThreadFunc(Client *client) {
 
 bool Client::processPacket(const Connection &connection, PacketType packetType) {
 	switch (packetType) {
-		case PacketType::ChatMessage: {
+		case PacketType::ServerChatMessage: {
+			std::wstring name;
 			std::wstring message;
 			if (!getString(connection, message)) return false;
+			if (!getString(connection, name)) return false;
 
-			chatMessageCallback(L"test_sender", message);
+			chatMessageCallback(message, name);
 
 			wprintf(L"%ls\n", message.c_str());
 

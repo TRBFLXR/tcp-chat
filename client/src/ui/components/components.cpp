@@ -35,7 +35,7 @@ void ui::Components::input(WORD id) {
 			app->getClient().sendString(textField->getText());
 			break;
 		case 3:
-//			textArea.append(textField.getText() + L"\n");
+			app->getClient().connectToServer(textField->getText(), "109.87.123.75", 1111);
 			break;
 		default:
 			break;

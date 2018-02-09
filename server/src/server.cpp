@@ -118,11 +118,17 @@ void Server::packetSenderThread(Server *server) {
 
 bool Server::processPacket(const Connection &connection, PacketType packetType) {
 	switch (packetType) {
+		case PacketType::Register: {
+			if (!getString(connection, connection.name)) return false;
+
+			break;
+		}
+
 		case PacketType::ChatMessage: {
 			std::wstring message;
 			if (!getString(connection, message)) return false;
 
-			ps::ChatMessage cm(message);
+			ps::ServerChatMessage cm(message, connection.name);
 			std::shared_ptr<Packet> msgPacket = std::make_shared<Packet>(cm.toPacket());
 			{
 				std::shared_lock<std::shared_mutex> lock(connectionMutex);

@@ -6,15 +6,17 @@
 #define TCP_CHAT_CONNECTION_HPP
 
 #include <winsock2.h>
+#include <string>
 #include <packetmanager.hpp>
 
 struct Connection {
 	explicit Connection() = default;
 	explicit Connection(SOCKET socket) : socket(socket), id(0) { }
 
-	int id;
-	SOCKET socket;
-	mutable PacketManager pm;
+	int id = 0;
+	SOCKET socket{ };
+	mutable std::wstring name;
+	mutable PacketManager pm{ };
 };
 
 
