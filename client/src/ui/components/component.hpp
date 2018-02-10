@@ -27,6 +27,8 @@ namespace ui {
 			SendMessage(handle, WM_SETFONT, (WPARAM) font, MAKELPARAM(FALSE, 0));
 		}
 
+		inline const HWND &getHwnd() const { return handle; }
+
 	protected:
 		HWND handle;
 		HWND parent;

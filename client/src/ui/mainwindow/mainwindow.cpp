@@ -54,7 +54,7 @@ LRESULT ui::MainWindow::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 			break;
 
 		case WM_COMMAND:
-			windowPtr->components->input(LOWORD(wParam));
+			windowPtr->components->input(wParam);
 			break;
 
 		case WM_DESTROY:

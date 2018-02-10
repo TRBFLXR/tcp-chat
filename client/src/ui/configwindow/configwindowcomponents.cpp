@@ -18,20 +18,29 @@ ui::ConfigWindowComponents::ConfigWindowComponents(Application *app, Window *par
 	add("ipLabel", new Label(L"Port", {20, 65}, {120, 20}, pHwnd, 4));
 	add("ipLabel", new Label(L"Name", {20, 120}, {120, 20}, pHwnd, 5));
 
-	add("textFieldIP", new TextField({20, 30}, {120, 20}, pHwnd, 0));
-	add("textFieldPort", new TextField({20, 85}, {120, 20}, pHwnd, 0));
+	add("textFieldIP", new TextField({20, 30}, {120, 20}, pHwnd, 6));
+	add("textFieldPort", new TextField({20, 85}, {120, 20}, pHwnd, 0, EDIT_DEFAULT_STYLE | ES_NUMBER));
 	add("textFieldName", new TextField({20, 140}, {120, 20}, pHwnd, 0));
 }
 
-void ui::ConfigWindowComponents::input(WORD id) {
-	switch (id) {
+void ui::ConfigWindowComponents::input(WPARAM wParam) {
+	switch (LOWORD(wParam)) {
 		case 1: {
-			std::wstring ip = ((TextField &) get("textFieldIP")).getText();
+			std::wstring wideIp = ((TextField &) get("textFieldIP")).getText();
+
+			std::string ip(wideIp.begin(), wideIp.end());
+			uint16_t port = (uint16_t) std::stoi(((TextField &) get("textFieldPort")).getText());
+			std::wstring name = ((TextField &) get("textFieldName")).getText();
+
+			if (inet_addr(ip.c_str()) == INADDR_NONE) {
+				MessageBox(parent->getHwnd(), L"Invalid ip address", L"Error", MB_OK | MB_ICONERROR);
+				return;
+			}
 
 			Config config;
-			config.name = ((TextField &) get("textFieldName")).getText();
-			config.ip = std::string(ip.begin(), ip.end());
-			config.port = (uint16_t) std::stoi(((TextField &) get("textFieldPort")).getText());
+			config.name = name;
+			config.ip = ip;
+			config.port = port;
 
 			Config::save(config);
 
@@ -39,8 +48,19 @@ void ui::ConfigWindowComponents::input(WORD id) {
 			break;
 		}
 		case 2:
+			if (((ConfigWindow *) parent)->shouldExit) {
+				MessageBeep(1);
+				if (MessageBox(parent->getHwnd(), L"You did not save the settings.\nDo you really want to exit?",
+				               L"Chatillo", MB_OKCANCEL | MB_ICONQUESTION) == IDOK) {
+					DestroyWindow(parent->getHwnd());
+				}
+				break;
+			}
+			DestroyWindow(parent->getHwnd());
 			break;
 
+		case 6:
+			break;
 		case 0:
 			break;
 		default:

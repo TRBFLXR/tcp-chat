@@ -1,6 +1,8 @@
 cmake-build-debug
 cmake-build-release
 
+config
+
 .idea/codeStyles
 .idea/inspectionProfiles
 .idea/dictionaries

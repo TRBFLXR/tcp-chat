@@ -14,7 +14,7 @@ namespace ui {
 	public:
 		explicit ConfigWindowComponents(Application *app, Window *parent);
 
-		void input(WORD id) override;
+		void input(WPARAM wParam) override;
 
 		void onCreate() override;
 	};

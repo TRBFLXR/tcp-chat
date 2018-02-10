@@ -24,7 +24,7 @@ namespace ui {
 		void add(const std::string_view &name, Component *component);
 		Component &get(const std::string_view &name);
 
-		virtual void input(WORD id) = 0;
+		virtual void input(WPARAM wParam) = 0;
 
 		virtual void onCreate() { }
 

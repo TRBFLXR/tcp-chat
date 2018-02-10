@@ -7,12 +7,13 @@
 
 
 #include "component.hpp"
+#include "../../util/style.hpp"
 
 namespace ui {
 
 	class TextField : public Component {
 	public:
-		explicit TextField(const vec2u &pos, const vec2u &size, const HWND &parent, WORD id);
+		explicit TextField(const vec2u &pos, const vec2u &size, const HWND &parent, WORD id, DWORD style = EDIT_DEFAULT_STYLE);
 
 		inline int setText(const std::wstring_view &text) const { SetWindowText(handle, text.data()); }
 		std::wstring getText() const;

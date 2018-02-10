@@ -17,8 +17,8 @@ ui::MainWindowComponents::MainWindowComponents(Application *app, Window *parent)
 	add("textField1", new TextField({130, 20}, {100, 20}, pHwnd, 0));
 }
 
-void ui::MainWindowComponents::input(WORD id) {
-	switch (id) {
+void ui::MainWindowComponents::input(WPARAM wParam) {
+	switch (LOWORD(wParam)) {
 		case 1:
 			((TextField &) get("textField1")).setText(L"Test жопа");
 			break;
