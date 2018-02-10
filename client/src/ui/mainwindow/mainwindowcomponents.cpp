@@ -5,7 +5,6 @@
 #include <sstream>
 #include "../../application.hpp"
 #include "mainwindowcomponents.hpp"
-#include "../../config.hpp"
 
 ui::MainWindowComponents::MainWindowComponents(Application *app, Window *parent) : Components(app, parent) {
 	HWND pHwnd = parent->getHwnd();

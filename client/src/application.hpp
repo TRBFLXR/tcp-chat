@@ -22,6 +22,7 @@ public:
 	inline Client *getClient() { return client; }
 
 	static void handleChatMessage(const std::wstring &sender, const std::wstring &message);
+	static void handleClientException(const std::exception &ex);
 
 private:
 	static Application *appPtr;

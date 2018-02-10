@@ -31,4 +31,4 @@ set(CLIENT_SRC
 add_executable(client_win32 WIN32 ${CLIENT_SRC})
 
 #console sub
-add_executable(client ${CLIENT_SRC})
+add_executable(client ${CLIENT_SRC} src/util/exception.hpp)

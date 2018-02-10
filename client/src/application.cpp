@@ -15,10 +15,9 @@ Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned
 	client = new Client();
 
 	client->setChatMessageCallback(handleChatMessage);
+	client->setExceptionCallback(handleClientException);
 
-	if (Config::load(config)) {
-		client->connectToServer(config.name, config.ip, config.port);
-	} else {
+	if (!Config::load(config)) {
 		EnableWindow(window.getHwnd(), FALSE);
 		configWindow.setShowCommand(SW_SHOW);
 	}
@@ -49,4 +48,8 @@ void Application::handleChatMessage(const std::wstring &message, const std::wstr
 	text << "\n";
 
 	((ui::TextArea &) appPtr->window.get("textArea1")).append(text.str());
+}
+
+void Application::handleClientException(const std::exception &ex) {
+	MessageBoxA(appPtr->window.getHwnd(), ex.what(), "Error", MB_OK | MB_ICONERROR);
 }

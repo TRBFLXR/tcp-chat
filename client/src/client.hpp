@@ -27,6 +27,10 @@ public:
 		chatMessageCallback = std::move(callback);
 	}
 
+	inline void setExceptionCallback(std::function<void(const std::exception&)> callback) {
+		showException = std::move(callback);
+	}
+
 private:
 	bool closeConnection();
 	bool processPacket(const Connection &connection, PacketType packetType) override;
@@ -46,6 +50,7 @@ private:
 	std::thread clientThread;
 
 	std::function<void(const std::wstring &, const std::wstring &)> chatMessageCallback;
+	std::function<void(const std::exception&)> showException;
 };
 
 

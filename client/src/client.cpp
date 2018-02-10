@@ -4,6 +4,7 @@
 
 #include <packetstructure.hpp>
 #include "client.hpp"
+#include "util/exception.hpp"
 
 Client::Client() : terminateThreads(false), isConnected(false) {
 	WSADATA wsaData{ };
@@ -32,10 +33,12 @@ bool Client::connectToServer(const std::wstring_view &name, const std::string_vi
 
 	int addrSize = sizeof(addr);
 	if (connect(connection.socket, reinterpret_cast<const SOCKADDR *>(&addr), addrSize) != 0) {
-		throw std::runtime_error("Failed to connect");
+		showException(connection_error("Failed to connect"));
 	}
 
 	wprintf(L"Connected!\n");
+
+	terminateThreads= false;
 
 	packetSenderThread = std::thread(packetSenderThreadFunc, this);
 	packetSenderThread.detach();
@@ -65,10 +68,8 @@ bool Client::closeConnection() {
 	if (closesocket(connection.socket) == SOCKET_ERROR) {
 		if (WSAGetLastError() == WSAENOTSOCK) return true;
 
-		std::wstring err = L"Failed to close socket. Winsock Error: " + std::to_wstring(WSAGetLastError());
-		MessageBox(nullptr, err.c_str(), L"Error", MB_OK | MB_ICONERROR);
-
-		return false;
+		std::string err = "Failed to close socket. Winsock Error: " + std::to_string(WSAGetLastError());
+		throw std::runtime_error(err);
 	}
 
 	return true;
@@ -89,11 +90,8 @@ void Client::clientThreadFunc(Client *client) {
 	wprintf(L"Lost connection\n");
 
 	client->terminateThreads = true;
-	if (client->closeConnection()) {
-		wprintf(L"Socket was closed successfully\n");
-	} else {
-		wprintf(L"Socket was not able to be closed\n");
-	}
+
+	client->closeConnection();
 }
 
 void Client::packetSenderThreadFunc(Client *client) {
@@ -104,8 +102,7 @@ void Client::packetSenderThreadFunc(Client *client) {
 			std::shared_ptr<Packet> p = client->connection.pm.pop();
 
 			if (!client->sendAll(client->connection, p->getBuffer().data(), (int) p->getBuffer().size())) {
-				wprintf(L"Failed to send packet to server...\n");
-				break;
+				client->showException(packet_error("Failed to send packet"));
 			}
 		}
 		Sleep(5);
