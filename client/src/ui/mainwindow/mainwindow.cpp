@@ -38,12 +38,14 @@ ui::MainWindow::MainWindow(Application *application, const std::wstring_view &ti
 	setupComponents();
 
 	windowPtr = this;
+
+	components->onCreate();
 }
 
 ui::MainWindow::~MainWindow() { }
 
 void ui::MainWindow::setupComponents() {
-	components = new MainWindowComponents(application, hwnd);
+	components = new MainWindowComponents(application, this);
 }
 
 LRESULT ui::MainWindow::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {

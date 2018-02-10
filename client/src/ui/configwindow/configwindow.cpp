@@ -9,7 +9,8 @@ ui::ConfigWindow *ui::ConfigWindow::windowPtr;
 
 ui::ConfigWindow::ConfigWindow(Application *application, const std::wstring_view &title,
                                HINSTANCE app, unsigned width, unsigned height, int cmd) :
-		Window(application, title) {
+		Window(application, title),
+		shouldExit(true) {
 
 	wc.cbSize = sizeof(wc);
 	wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -28,11 +29,11 @@ ui::ConfigWindow::ConfigWindow(Application *application, const std::wstring_view
 
 	HWND parent = application->getMainWindow().getHwnd();
 
-	RECT parentRect{};
+	RECT parentRect{ };
 	GetWindowRect(parent, &parentRect);
 
-	hwnd = CreateWindowW(L"ConfigWindowClass", title.data(),
-	                     WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU ,
+	hwnd = CreateWindow(L"ConfigWindowClass", title.data(),
+	                     WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
 	                     parentRect.top, parentRect.left, width, height,
 	                     parent, nullptr, app, nullptr);
 
@@ -45,12 +46,14 @@ ui::ConfigWindow::ConfigWindow(Application *application, const std::wstring_view
 	setupComponents();
 
 	windowPtr = this;
+
+	components->onCreate();
 }
 
 ui::ConfigWindow::~ConfigWindow() { }
 
 void ui::ConfigWindow::setupComponents() {
-	components = new ConfigWindowComponents(application, hwnd);
+	components = new ConfigWindowComponents(application, this);
 }
 
 LRESULT ui::ConfigWindow::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -63,10 +66,21 @@ LRESULT ui::ConfigWindow::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			break;
 
 		case WM_DESTROY:
-			PostQuitMessage(EXIT_SUCCESS);
-//			BringWindowToTop(windowPtr->application->getMainWindow().getHwnd());
-//			EnableWindow(windowPtr->application->getMainWindow().getHwnd(), TRUE);
+			if (windowPtr->shouldExit) {
+				PostQuitMessage(EXIT_SUCCESS);
+				break;
+			}
+			BringWindowToTop(windowPtr->application->getMainWindow().getHwnd());
+			EnableWindow(windowPtr->application->getMainWindow().getHwnd(), TRUE);
 			break;
+
+		case WM_CTLCOLORSTATIC: {
+			auto hdcStatic = reinterpret_cast<HDC>(wParam);
+			SetTextColor(hdcStatic, RGB(0, 0, 0));
+			SetBkMode(hdcStatic, TRANSPARENT);
+
+			return WHITE_BRUSH;
+		}
 
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);

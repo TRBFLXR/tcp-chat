@@ -24,7 +24,11 @@ namespace ui {
 		static LRESULT inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	private:
+		friend class ConfigWindowComponents;
+
 		static ConfigWindow *windowPtr;
+
+		bool shouldExit;
 	};
 
 }

@@ -7,7 +7,6 @@
 
 
 #include "component.hpp"
-#include "../../util/types.hpp"
 
 namespace ui {
 

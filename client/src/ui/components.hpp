@@ -15,20 +15,24 @@ class Application;
 
 namespace ui {
 
+	class Window;
+
 	class Components {
 	public:
-		explicit Components(Application *app,HWND parent);
+		explicit Components(Application *app, Window *parent);
 
 		void add(const std::string_view &name, Component *component);
 		Component &get(const std::string_view &name);
 
 		virtual void input(WORD id) = 0;
 
+		virtual void onCreate() { }
+
 	protected:
 		std::unordered_map<std::string, std::unique_ptr<Component>> components;
 
 		Application *app;
-		HWND parent;
+		Window *parent;
 	};
 
 }

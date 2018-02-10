@@ -14,7 +14,7 @@
 namespace ui {
 
 	struct MainWindowComponents : public Components {
-		explicit MainWindowComponents(Application *app,HWND parent);
+		explicit MainWindowComponents(Application *app, Window *parent);
 
 		void input(WORD id) override;
 	};

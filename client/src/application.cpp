@@ -10,7 +10,7 @@ Application *Application::appPtr;
 
 Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned width, unsigned height, int cmd) :
 		window(this, title, app, width, height, cmd),
-		configWindow(this, L"Config", app, 500, 300, SW_HIDE) {
+		configWindow(this, L"Config", app, 170, 290, SW_HIDE) {
 
 	client = new Client();
 

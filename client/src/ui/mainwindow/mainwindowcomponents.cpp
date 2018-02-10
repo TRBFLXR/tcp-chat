@@ -6,12 +6,14 @@
 #include "mainwindowcomponents.hpp"
 #include "../../config.hpp"
 
-ui::MainWindowComponents::MainWindowComponents(Application *app,HWND parent) : Components(app, parent) {
-	add("button1", new Button(L"button1", {20, 20}, {100, 20}, parent, 1));
-	add("button2", new Button(L"button2", {20, 50}, {100, 20}, parent, 2));
-	add("button3", new Button(L"button3", {20, 80}, {100, 20}, parent, 3));
-	add("textArea1", new TextArea(L"", {0, 120}, {500, 320}, parent, 0));
-	add("textField1", new TextField(L"", {130, 20}, {100, 20}, parent, 0));
+ui::MainWindowComponents::MainWindowComponents(Application *app, Window *parent) : Components(app, parent) {
+	HWND pHwnd = parent->getHwnd();
+
+	add("button1", new Button(L"button1", {20, 20}, {100, 20}, pHwnd, 1));
+	add("button2", new Button(L"button2", {20, 50}, {100, 20}, pHwnd, 2));
+	add("button3", new Button(L"button3", {20, 80}, {100, 20}, pHwnd, 3));
+	add("textArea1", new TextArea({0, 120}, {500, 320}, pHwnd, 0));
+	add("textField1", new TextField({130, 20}, {100, 20}, pHwnd, 0));
 }
 
 void ui::MainWindowComponents::input(WORD id) {

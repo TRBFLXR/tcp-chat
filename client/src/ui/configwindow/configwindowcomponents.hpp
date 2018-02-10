@@ -12,9 +12,11 @@ namespace ui {
 
 	class ConfigWindowComponents : public Components {
 	public:
-		explicit ConfigWindowComponents(Application* app, HWND parent);
+		explicit ConfigWindowComponents(Application *app, Window *parent);
 
 		void input(WORD id) override;
+
+		void onCreate() override;
 	};
 
 }

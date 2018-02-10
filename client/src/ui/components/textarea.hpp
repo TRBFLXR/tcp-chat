@@ -12,7 +12,7 @@ namespace ui {
 
 	class TextArea : public Component {
 	public:
-		explicit TextArea(const std::wstring_view &name, const vec2u &pos, const vec2u &size, const HWND &parent, WORD id);
+		explicit TextArea(const vec2u &pos, const vec2u &size, const HWND &parent, WORD id);
 
 		void append(const std::wstring_view &text) const;
 	};

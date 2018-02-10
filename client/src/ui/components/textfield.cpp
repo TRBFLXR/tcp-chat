@@ -4,13 +4,13 @@
 
 #include "textfield.hpp"
 
-ui::TextField::TextField(const std::wstring_view &name, const vec2u &pos, const vec2u &size, const HWND &parent, WORD id)
+ui::TextField::TextField(const vec2u &pos, const vec2u &size, const HWND &parent, WORD id)
 		: Component(pos, size, parent, id) {
 
-	handle = CreateWindow(L"EDIT", name.data(), WS_VISIBLE | WS_CHILD | WS_BORDER,
+	handle = CreateWindow(L"EDIT", L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
 	                      pos.x, pos.y, size.x, size.y, parent, reinterpret_cast<HMENU>(id), nullptr, nullptr);
 
-	setFont(L"Consolas");
+	setFont(L"SansSerif", 14);
 }
 
 std::wstring ui::TextField::getText() const {

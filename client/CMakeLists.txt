@@ -25,7 +25,7 @@ set(CLIENT_SRC
         src/ui/configwindow/configwindow.cpp
         src/ui/configwindow/configwindowcomponents.cpp
         src/application.cpp
-        src/config.cpp)
+        src/config.cpp src/ui/components/label.cpp src/ui/components/label.hpp)
 
 #win32
 add_executable(client_win32 WIN32 ${CLIENT_SRC})

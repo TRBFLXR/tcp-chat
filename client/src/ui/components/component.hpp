@@ -17,8 +17,8 @@ namespace ui {
 		explicit Component(const vec2u &position, const vec2u &size, const HWND &parent, WORD id)
 				: handle(nullptr), parent(parent), id(id), position(position), size(size) { };
 
-		void setFont(const std::wstring_view &fontName) const {
-			HFONT hfDefault = CreateFont(0, 0, 0, 0, FW_NORMAL, FALSE, FALSE, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS,
+		void setFont(const std::wstring_view &fontName, int size = 0) const {
+			HFONT hfDefault = CreateFont(-size, 0, 0, 0, FW_NORMAL, FALSE, FALSE, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS,
 			                             CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, fontName.data());
 			SendMessage(handle, WM_SETFONT, (WPARAM) hfDefault, MAKELPARAM(FALSE, 0));
 		}

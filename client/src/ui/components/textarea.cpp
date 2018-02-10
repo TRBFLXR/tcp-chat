@@ -4,10 +4,10 @@
 
 #include "textarea.hpp"
 
-ui::TextArea::TextArea(const std::wstring_view &name, const vec2u &pos, const vec2u &size, const HWND &parent, WORD id) :
+ui::TextArea::TextArea(const vec2u &pos, const vec2u &size, const HWND &parent, WORD id) :
 		Component(pos, size, parent, id) {
 
-	handle = CreateWindow(L"EDIT", name.data(),
+	handle = CreateWindow(L"EDIT", L"",
 	                      WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_READONLY |
 	                      WS_HSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL,
 	                      pos.x, pos.y, size.x, size.y, parent, reinterpret_cast<HMENU>(id), nullptr, nullptr);
