@@ -5,7 +5,7 @@
 #include <cassert>
 #include "components.hpp"
 
-ui::Components::Components(Application *app) : app(app) { }
+ui::Components::Components(Application *app, HWND parent) : app(app), parent(parent) { }
 
 
 void ui::Components::add(const std::string_view &name, ui::Component *component) {

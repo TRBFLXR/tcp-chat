@@ -6,9 +6,7 @@
 #include "mainwindowcomponents.hpp"
 #include "../../config.hpp"
 
-ui::MainWindowComponents::MainWindowComponents(Application *app) : Components(app) {
-	HWND parent = app->getWindow().getHwnd();
-
+ui::MainWindowComponents::MainWindowComponents(Application *app,HWND parent) : Components(app, parent) {
 	add("button1", new Button(L"button1", {20, 20}, {100, 20}, parent, 1));
 	add("button2", new Button(L"button2", {20, 50}, {100, 20}, parent, 2));
 	add("button3", new Button(L"button3", {20, 80}, {100, 20}, parent, 3));

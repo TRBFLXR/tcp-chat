@@ -6,10 +6,25 @@
 #define TCP_CHAT_CONFIGWINDOW_HPP
 
 
+#include "../window.hpp"
+
 namespace ui {
 
-	class ConfigWindow {
+	class ConfigWindow : public Window {
+	public:
+		explicit ConfigWindow(Application *application, const std::wstring_view &title,
+		                      HINSTANCE app, unsigned width, unsigned height, int cmd);
 
+		~ConfigWindow() override;
+
+		void setupComponents() override;
+
+
+	private:
+		static LRESULT inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+	private:
+		static ConfigWindow *windowPtr;
 	};
 
 }

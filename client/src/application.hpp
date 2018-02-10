@@ -8,6 +8,7 @@
 #include <packetstructure.hpp>
 #include "client.hpp"
 #include "ui/mainwindow/mainwindow.hpp"
+#include "ui/configwindow/configwindow.hpp"
 
 class Application {
 public:
@@ -16,7 +17,7 @@ public:
 
 	int run();
 
-	inline const ui::Window &getWindow() const { return window; }
+	inline const ui::MainWindow &getMainWindow() const { return window; }
 	inline Client *getClient() { return client; }
 
 	static void handleChatMessage(const std::wstring &sender, const std::wstring &message);
@@ -28,6 +29,7 @@ private:
 
 	Client *client;
 	ui::MainWindow window;
+	ui::ConfigWindow configWindow;
 };
 
 

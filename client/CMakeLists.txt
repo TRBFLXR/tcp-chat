@@ -23,6 +23,7 @@ set(CLIENT_SRC
         src/ui/mainwindow/mainwindow.cpp
         src/ui/mainwindow/mainwindowcomponents.cpp
         src/ui/configwindow/configwindow.cpp
+        src/ui/configwindow/configwindowcomponents.cpp
         src/application.cpp
         src/config.cpp)
 

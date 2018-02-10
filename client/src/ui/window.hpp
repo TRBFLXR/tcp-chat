@@ -15,8 +15,7 @@ namespace ui {
 
 	class Window {
 	public:
-		explicit Window(Application *application, const std::wstring_view &title, const std::wstring_view &className,
-		                WNDPROC proc, HINSTANCE app, unsigned width, unsigned height, int cmd);
+		explicit Window(Application *application, const std::wstring_view &title);
 
 		virtual ~Window();
 
@@ -27,6 +26,7 @@ namespace ui {
 		Component &get(const std::string_view &componentName) { return components->get(componentName); }
 
 		void setTitle(const std::wstring_view &title);
+		void setShowCommand(int cmd) const;
 
 	protected:
 		Application *application;

@@ -13,7 +13,7 @@ bool Config::load(Config &config) {
 
 	gConfig = config;
 
-	return true;
+	return false;
 }
 
 void Config::save(const Config &config) {

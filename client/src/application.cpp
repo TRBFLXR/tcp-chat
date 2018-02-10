@@ -9,7 +9,8 @@
 Application *Application::appPtr;
 
 Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned width, unsigned height, int cmd) :
-		window(this, title, app, width, height, cmd) {
+		window(this, title, app, width, height, cmd),
+		configWindow(this, L"Config", app, 500, 300, SW_HIDE) {
 
 	client = new Client();
 
@@ -19,7 +20,7 @@ Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned
 	if (Config::load(config)) {
 		client->connectToServer(config.name, config.ip, config.port);
 	} else {
-
+		configWindow.setShowCommand(SW_SHOW);
 	}
 
 	appPtr = this;

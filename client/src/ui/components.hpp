@@ -17,7 +17,7 @@ namespace ui {
 
 	class Components {
 	public:
-		explicit Components(Application *app);
+		explicit Components(Application *app,HWND parent);
 
 		void add(const std::string_view &name, Component *component);
 		Component &get(const std::string_view &name);
@@ -28,6 +28,7 @@ namespace ui {
 		std::unordered_map<std::string, std::unique_ptr<Component>> components;
 
 		Application *app;
+		HWND parent;
 	};
 
 }
