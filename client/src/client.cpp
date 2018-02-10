@@ -124,8 +124,6 @@ bool Client::processPacket(const Connection &connection, PacketType packetType) 
 
 			chatMessageCallback(message, name);
 
-			wprintf(L"%ls\n", message.c_str());
-
 			break;
 		}
 		default:

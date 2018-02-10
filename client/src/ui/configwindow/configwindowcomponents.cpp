@@ -25,10 +25,19 @@ ui::ConfigWindowComponents::ConfigWindowComponents(Application *app, Window *par
 
 void ui::ConfigWindowComponents::input(WORD id) {
 	switch (id) {
-		case 1:
+		case 1: {
+			std::wstring ip = ((TextField &) get("textFieldIP")).getText();
+
+			Config config;
+			config.name = ((TextField &) get("textFieldName")).getText();
+			config.ip = std::string(ip.begin(), ip.end());
+			config.port = (uint16_t) std::stoi(((TextField &) get("textFieldPort")).getText());
+
+			Config::save(config);
+
 			((ConfigWindow *) parent)->shouldExit = false;
 			break;
-
+		}
 		case 2:
 			break;
 
@@ -40,5 +49,7 @@ void ui::ConfigWindowComponents::input(WORD id) {
 }
 
 void ui::ConfigWindowComponents::onCreate() {
-	((TextField &) get("textFieldIP")).setText(L"255.255.255.255");
+	((TextField &) get("textFieldName")).setText(L"name");
+	((TextField &) get("textFieldIP")).setText(L"109.87.123.75");
+	((TextField &) get("textFieldPort")).setText(L"1111");
 }

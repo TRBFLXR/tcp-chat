@@ -2,8 +2,8 @@
 // Created by Igor on 2/7/2018.
 //
 
+#include <sstream>
 #include "application.hpp"
-#include "config.hpp"
 #include "ui/components/textarea.hpp"
 
 Application *Application::appPtr;
@@ -16,10 +16,10 @@ Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned
 
 	client->setChatMessageCallback(handleChatMessage);
 
-	Config config;
 	if (Config::load(config)) {
 		client->connectToServer(config.name, config.ip, config.port);
 	} else {
+		EnableWindow(window.getHwnd(), FALSE);
 		configWindow.setShowCommand(SW_SHOW);
 	}
 
@@ -42,5 +42,11 @@ int Application::run() {
 }
 
 void Application::handleChatMessage(const std::wstring &message, const std::wstring &sender) {
-	((ui::TextArea &) appPtr->window.get("textArea1")).append(sender + L": " + message + L"\n");
+	std::wstringstream text;
+	text << sender.c_str();
+	text << L": ";
+	text << message.c_str();
+	text << "\n";
+
+	((ui::TextArea &) appPtr->window.get("textArea1")).append(text.str());
 }

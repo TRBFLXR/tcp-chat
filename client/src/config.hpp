@@ -15,7 +15,7 @@ struct Config {
 	std::wstring name;
 
 	static bool load(Config &config);
-	static void save(const Config &config);
+	static bool save(const Config &config);
 };
 
 extern Config gConfig;

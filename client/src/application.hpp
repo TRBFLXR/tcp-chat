@@ -9,6 +9,7 @@
 #include "client.hpp"
 #include "ui/mainwindow/mainwindow.hpp"
 #include "ui/configwindow/configwindow.hpp"
+#include "config.hpp"
 
 class Application {
 public:
@@ -27,6 +28,7 @@ private:
 
 	MSG msg;
 
+	Config config;
 	Client *client;
 	ui::MainWindow window;
 	ui::ConfigWindow configWindow;

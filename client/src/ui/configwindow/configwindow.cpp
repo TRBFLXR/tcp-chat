@@ -41,8 +41,6 @@ ui::ConfigWindow::ConfigWindow(Application *application, const std::wstring_view
 
 	setShowCommand(cmd);
 
-	EnableWindow(application->getMainWindow().getHwnd(), FALSE);
-
 	setupComponents();
 
 	windowPtr = this;
