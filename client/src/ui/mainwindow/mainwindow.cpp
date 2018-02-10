@@ -2,7 +2,7 @@
 // Created by Igor on 2/9/2018.
 //
 
-#include "mainwindow.hpp"
+#include "../../application.hpp"
 #include "mainwindowcomponents.hpp"
 
 ui::MainWindow *ui::MainWindow::windowPtr;
@@ -46,15 +46,39 @@ ui::MainWindow::~MainWindow() { }
 
 void ui::MainWindow::setupComponents() {
 	components = new MainWindowComponents(application, this);
+
+	HMENU hMenu = CreateMenu();
+	HMENU hFile = CreateMenu();
+	HMENU hOptions = CreateMenu();
+
+	AppendMenu(hMenu, MF_POPUP, (UINT_PTR) hFile, L"File");
+	AppendMenu(hMenu, MF_POPUP, (UINT_PTR) hOptions, L"Options");
+
+	AppendMenu(hFile, MF_STRING, 1001, L"Disconnect");
+	AppendMenu(hFile, MF_STRING, 1002, L"Exit");
+
+	AppendMenu(hOptions, MF_STRING, 1003, L"Configure");
+
+	SetMenu(getHwnd(), hMenu);
 }
 
 LRESULT ui::MainWindow::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
-		case WM_CREATE:
-			break;
-
 		case WM_COMMAND:
 			windowPtr->components->input(wParam);
+			switch (LOWORD(wParam)) {
+				case 1001:
+					windowPtr->application->getClient()->disconnect();
+					break;
+				case 1002:
+					DestroyWindow(windowPtr->getHwnd());
+					break;
+				case 1003:
+					windowPtr->application->showConfigWindow();
+					break;
+				default:
+					break;
+			}
 			break;
 
 		case WM_DESTROY:

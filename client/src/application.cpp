@@ -18,8 +18,7 @@ Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned
 	client->setExceptionCallback(handleClientException);
 
 	if (!Config::load(config)) {
-		EnableWindow(window.getHwnd(), FALSE);
-		configWindow.setShowCommand(SW_SHOW);
+		showConfigWindow();
 	}
 
 	appPtr = this;
@@ -52,4 +51,9 @@ void Application::handleChatMessage(const std::wstring &message, const std::wstr
 
 void Application::handleClientException(const std::exception &ex) {
 	MessageBoxA(appPtr->window.getHwnd(), ex.what(), "Error", MB_OK | MB_ICONERROR);
+}
+
+void Application::showConfigWindow() const {
+	EnableWindow(window.getHwnd(), FALSE);
+	configWindow.setShowCommand(SW_SHOW);
 }

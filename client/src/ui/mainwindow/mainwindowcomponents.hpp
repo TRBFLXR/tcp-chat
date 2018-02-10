@@ -13,10 +13,14 @@
 
 namespace ui {
 
-	struct MainWindowComponents : public Components {
+	class MainWindowComponents : public Components {
+	public:
 		explicit MainWindowComponents(Application *app, Window *parent);
 
 		void input(WPARAM wParam) override;
+
+	private:
+		void sendMessage();
 	};
 
 }

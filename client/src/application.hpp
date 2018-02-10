@@ -18,6 +18,8 @@ public:
 
 	int run();
 
+	void showConfigWindow() const;
+
 	inline const ui::MainWindow &getMainWindow() const { return window; }
 	inline Client *getClient() { return client; }
 
