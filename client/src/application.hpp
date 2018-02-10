@@ -18,7 +18,10 @@ public:
 
 	int run();
 
-	void showConfigWindow() const;
+	void showConfigWindow();
+
+	inline bool shouldClose() const { return shouldExit; }
+	inline void shouldClose(bool close) { shouldExit = close; }
 
 	inline const ui::MainWindow &getMainWindow() const { return window; }
 	inline Client *getClient() { return client; }
@@ -30,6 +33,9 @@ private:
 	static Application *appPtr;
 
 	MSG msg;
+	HINSTANCE hInstaice;
+
+	bool shouldExit;
 
 	Config config;
 	Client *client;

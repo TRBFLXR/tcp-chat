@@ -16,7 +16,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int sh
 	int exit = 0;
 
 	try {
-		Application app(L"test тест", hInst, 800, 600, showCmd);
+		Application app(L"ЖОПА", hInst, 827, 493, showCmd);
 		exit = app.run();
 
 	} catch (const std::exception &ex) {

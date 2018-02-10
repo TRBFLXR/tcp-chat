@@ -15,11 +15,11 @@ ui::ConfigWindowComponents::ConfigWindowComponents(Application *app, Window *par
 	add("closeButton", new Button(L"Close", {20, 220}, {120, 20}, pHwnd, 2));
 
 	add("ipLabel", new Label(L"IP", {20, 10}, {120, 20}, pHwnd, 3));
-	add("ipLabel", new Label(L"Port", {20, 65}, {120, 20}, pHwnd, 4));
-	add("ipLabel", new Label(L"Name", {20, 120}, {120, 20}, pHwnd, 5));
+	add("portLabel", new Label(L"Port", {20, 65}, {120, 20}, pHwnd, 4));
+	add("nameLabel", new Label(L"Name", {20, 120}, {120, 20}, pHwnd, 5));
 
 	add("textFieldIP", new TextField({20, 30}, {120, 20}, pHwnd, 6));
-	add("textFieldPort", new TextField({20, 85}, {120, 20}, pHwnd, 0, EDIT_DEFAULT_STYLE | ES_NUMBER));
+	add("textFieldPort", new TextField({20, 85}, {120, 20}, pHwnd, 0, DEFAULT_EDIT_STYLE | ES_NUMBER));
 	add("textFieldName", new TextField({20, 140}, {120, 20}, pHwnd, 0));
 }
 
@@ -44,11 +44,11 @@ void ui::ConfigWindowComponents::input(WPARAM wParam) {
 
 			Config::save(config);
 
-			((ConfigWindow *) parent)->shouldExit = false;
+			app->shouldClose(false);
 			break;
 		}
 		case 2:
-			if (((ConfigWindow *) parent)->shouldExit) {
+			if (app->shouldClose()) {
 				MessageBeep(1);
 				if (MessageBox(parent->getHwnd(), L"You did not save the settings.\nDo you really want to exit?",
 				               L"Chatillo", MB_OKCANCEL | MB_ICONQUESTION) == IDOK) {
@@ -56,7 +56,9 @@ void ui::ConfigWindowComponents::input(WPARAM wParam) {
 				}
 				break;
 			}
-			DestroyWindow(parent->getHwnd());
+			BringWindowToTop(app->getMainWindow().getHwnd());
+			EnableWindow(app->getMainWindow().getHwnd(), TRUE);
+			parent->setShowCommand(SW_HIDE);
 			break;
 
 		case 6:

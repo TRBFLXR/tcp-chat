@@ -20,12 +20,13 @@ set(CLIENT_SRC
         src/ui/components/button.cpp
         src/ui/components/textfield.cpp
         src/ui/components/textarea.cpp
+        src/ui/components/label.cpp
         src/ui/mainwindow/mainwindow.cpp
         src/ui/mainwindow/mainwindowcomponents.cpp
         src/ui/configwindow/configwindow.cpp
         src/ui/configwindow/configwindowcomponents.cpp
         src/application.cpp
-        src/config.cpp src/ui/components/label.cpp src/ui/components/label.hpp)
+        src/config.cpp)
 
 #win32
 add_executable(client_win32 WIN32 ${CLIENT_SRC})

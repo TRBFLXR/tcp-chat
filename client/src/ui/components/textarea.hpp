@@ -7,12 +7,14 @@
 
 
 #include "component.hpp"
+#include "../../util/style.hpp"
 
 namespace ui {
 
 	class TextArea : public Component {
 	public:
-		explicit TextArea(const vec2u &pos, const vec2u &size, const HWND &parent, WORD id);
+		explicit TextArea(const vec2u &pos, const vec2u &size, const HWND &parent, WORD id,
+		                  DWORD style = DEFAULT_TEXTAREA_STYLE);
 
 		void append(const std::wstring_view &text) const;
 	};

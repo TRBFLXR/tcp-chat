@@ -10,7 +10,9 @@ Application *Application::appPtr;
 
 Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned width, unsigned height, int cmd) :
 		window(this, title, app, width, height, cmd),
-		configWindow(this, L"Config", app, 170, 290, SW_HIDE) {
+		configWindow(this, L"Config", app, 170, 290, SW_HIDE),
+		hInstaice(app),
+		shouldExit(false) {
 
 	client = new Client();
 
@@ -18,6 +20,7 @@ Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned
 	client->setExceptionCallback(handleClientException);
 
 	if (!Config::load(config)) {
+		shouldExit = true;
 		showConfigWindow();
 	}
 
@@ -46,14 +49,14 @@ void Application::handleChatMessage(const std::wstring &message, const std::wstr
 	text << message.c_str();
 	text << "\n";
 
-	((ui::TextArea &) appPtr->window.get("textArea1")).append(text.str());
+	((ui::TextArea &) appPtr->window.get("textAreaChat")).append(text.str());
 }
 
 void Application::handleClientException(const std::exception &ex) {
 	MessageBoxA(appPtr->window.getHwnd(), ex.what(), "Error", MB_OK | MB_ICONERROR);
 }
 
-void Application::showConfigWindow() const {
+void Application::showConfigWindow() {
 	EnableWindow(window.getHwnd(), FALSE);
 	configWindow.setShowCommand(SW_SHOW);
 }

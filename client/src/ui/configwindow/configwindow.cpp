@@ -9,8 +9,7 @@ ui::ConfigWindow *ui::ConfigWindow::windowPtr;
 
 ui::ConfigWindow::ConfigWindow(Application *application, const std::wstring_view &title,
                                HINSTANCE app, unsigned width, unsigned height, int cmd) :
-		Window(application, title),
-		shouldExit(true) {
+		Window(application, title) {
 
 	wc.cbSize = sizeof(wc);
 	wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -33,7 +32,7 @@ ui::ConfigWindow::ConfigWindow(Application *application, const std::wstring_view
 	GetWindowRect(parent, &parentRect);
 
 	hwnd = CreateWindow(L"ConfigWindowClass", title.data(),
-	                     WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
+	                     WS_OVERLAPPED | WS_CAPTION ,
 	                     parentRect.top, parentRect.left, width, height,
 	                     parent, nullptr, app, nullptr);
 
@@ -64,12 +63,7 @@ LRESULT ui::ConfigWindow::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			break;
 
 		case WM_DESTROY:
-			if (windowPtr->shouldExit) {
-				PostQuitMessage(EXIT_SUCCESS);
-				break;
-			}
-			BringWindowToTop(windowPtr->application->getMainWindow().getHwnd());
-			EnableWindow(windowPtr->application->getMainWindow().getHwnd(), TRUE);
+			PostQuitMessage(EXIT_SUCCESS);
 			break;
 
 		case WM_CTLCOLORSTATIC: {

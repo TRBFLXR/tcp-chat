@@ -27,8 +27,6 @@ namespace ui {
 		friend class ConfigWindowComponents;
 
 		static ConfigWindow *windowPtr;
-
-		bool shouldExit;
 	};
 
 }

@@ -9,11 +9,11 @@
 ui::MainWindowComponents::MainWindowComponents(Application *app, Window *parent) : Components(app, parent) {
 	HWND pHwnd = parent->getHwnd();
 
-	add("buttonSend", new Button(L"Send", {20, 20}, {100, 20}, pHwnd, 1));
-	add("buttonConnect", new Button(L"Connect", {20, 50}, {100, 20}, pHwnd, 2));
-	add("buttonDisconnect", new Button(L"Disconnect", {20, 80}, {100, 20}, pHwnd, 3));
-	add("textAreaChat", new TextArea({0, 120}, {500, 320}, pHwnd, 0));
-	add("textFieldMessage", new TextField({130, 20}, {100, 20}, pHwnd, 0));
+	add("buttonSend", new Button(L"Send", {505, 410}, {100, 26}, pHwnd, 1));
+	add("buttonConnect", new Button(L"Connect", {610, 5}, {100, 20}, pHwnd, 2));
+	add("buttonDisconnect", new Button(L"Disconnect", {715, 5}, {100, 20}, pHwnd, 3));
+	add("textAreaChat", new TextArea({5, 5}, {600, 400}, pHwnd, 0, DEFAULT_TEXTAREA_STYLE | ES_READONLY));
+	add("textFieldMessage", new TextField({5, 410}, {495, 26}, pHwnd, 0));
 }
 
 void ui::MainWindowComponents::input(WPARAM wParam) {
@@ -24,14 +24,32 @@ void ui::MainWindowComponents::input(WPARAM wParam) {
 		}
 		case 2: {
 			app->getClient()->connectToServer(gConfig.name, gConfig.ip, gConfig.port);
+			EnableWindow(((Button &) get("buttonConnect")).getHwnd(), FALSE);
+			EnableWindow(((Button &) get("buttonSend")).getHwnd(), TRUE);
+			EnableWindow(((Button &) get("buttonDisconnect")).getHwnd(), TRUE);
+			EnableWindow(((TextField &) get("textFieldMessage")).getHwnd(), TRUE);
 			break;
 		}
-		case 3:
+		case 3: {
 			app->getClient()->disconnect();
+			EnableWindow(((Button &) get("buttonConnect")).getHwnd(), TRUE);
+			EnableWindow(((Button &) get("buttonSend")).getHwnd(), FALSE);
+			EnableWindow(((Button &) get("buttonDisconnect")).getHwnd(), FALSE);
+			EnableWindow(((TextField &) get("textFieldMessage")).getHwnd(), FALSE);
 			break;
+		}
 		default:
 			break;
 	}
+}
+
+void ui::MainWindowComponents::onCreate() {
+	EnableWindow(((TextField &) get("textFieldMessage")).getHwnd(), FALSE);
+	EnableWindow(((Button &) get("buttonConnect")).getHwnd(), TRUE);
+	EnableWindow(((Button &) get("buttonSend")).getHwnd(), FALSE);
+	EnableWindow(((Button &) get("buttonDisconnect")).getHwnd(), FALSE);
+
+	((TextField &) get("textFieldMessage")).setFont(L"SansSerif", 18);
 }
 
 void ui::MainWindowComponents::sendMessage() {
@@ -49,4 +67,6 @@ void ui::MainWindowComponents::sendMessage() {
 	text << "\n";
 
 	((TextArea &) get("textAreaChat")).append(text.str());
+
+	((TextField &) get("textFieldMessage")).setText(L"");
 }

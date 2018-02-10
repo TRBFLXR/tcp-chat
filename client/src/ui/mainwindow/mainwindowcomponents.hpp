@@ -19,6 +19,8 @@ namespace ui {
 
 		void input(WPARAM wParam) override;
 
+		void onCreate() override;
+
 	private:
 		void sendMessage();
 	};
