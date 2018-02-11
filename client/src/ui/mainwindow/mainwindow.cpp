@@ -27,7 +27,7 @@ ui::MainWindow::MainWindow(Application *application, const std::wstring_view &ti
 	if (!RegisterClassExW(&wc)) throw std::runtime_error("Unable to register class");
 
 	hwnd = CreateWindowW(L"MainWindowClass", title.data(),
-	                     WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU |WS_MINIMIZEBOX ,
+	                     WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 	                     CW_USEDEFAULT, CW_USEDEFAULT, width, height,
 	                     nullptr, nullptr, app, nullptr);
 
@@ -64,7 +64,7 @@ void ui::MainWindow::setupComponents() {
 
 LRESULT ui::MainWindow::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
-		case WM_COMMAND:
+		case WM_COMMAND: {
 			windowPtr->components->input(wParam);
 			switch (LOWORD(wParam)) {
 				case 1001:
@@ -81,7 +81,7 @@ LRESULT ui::MainWindow::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 					break;
 			}
 			break;
-
+		}
 		case WM_DESTROY:
 			PostQuitMessage(EXIT_SUCCESS);
 			break;

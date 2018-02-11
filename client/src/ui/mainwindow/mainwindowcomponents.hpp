@@ -18,11 +18,17 @@ namespace ui {
 		explicit MainWindowComponents(Application *app, Window *parent);
 
 		void input(WPARAM wParam) override;
-
 		void onCreate() override;
 
-	private:
 		void sendMessage();
+
+	private:
+		static LRESULT subEditProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+	private:
+		static MainWindowComponents *comPtr;
+
+		WNDPROC oldEditProc;
 	};
 
 }

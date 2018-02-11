@@ -6,20 +6,28 @@
 #include "../../application.hpp"
 #include "mainwindowcomponents.hpp"
 
+ui::MainWindowComponents *ui::MainWindowComponents::comPtr;
+
 ui::MainWindowComponents::MainWindowComponents(Application *app, Window *parent) : Components(app, parent) {
 	HWND pHwnd = parent->getHwnd();
 
 	add("buttonSend", new Button(L"Send", {505, 410}, {100, 26}, pHwnd, 1));
 	add("buttonConnect", new Button(L"Connect", {610, 5}, {100, 20}, pHwnd, 2));
 	add("buttonDisconnect", new Button(L"Disconnect", {715, 5}, {100, 20}, pHwnd, 3));
-	add("textAreaChat", new TextArea({5, 5}, {600, 400}, pHwnd, 0, DEFAULT_TEXTAREA_STYLE | ES_READONLY));
-	add("textFieldMessage", new TextField({5, 410}, {495, 26}, pHwnd, 0));
+	add("textAreaChat", new TextArea({5, 5}, {600, 400}, pHwnd, 4, DEFAULT_TEXTAREA_STYLE | ES_READONLY));
+	add("textFieldMessage", new TextField({5, 410}, {495, 26}, pHwnd, 5));
+
+	oldEditProc = (WNDPROC) SetWindowLongPtr((get("textFieldMessage")).getHwnd(), GWLP_WNDPROC, (LONG_PTR) subEditProc);
+
+	comPtr = this;
 }
 
 void ui::MainWindowComponents::input(WPARAM wParam) {
 	switch (LOWORD(wParam)) {
 		case 1: {
 			sendMessage();
+
+			SetFocus(((TextField &) get("textFieldMessage")).getHwnd());
 			break;
 		}
 		case 2: {
@@ -28,6 +36,8 @@ void ui::MainWindowComponents::input(WPARAM wParam) {
 			EnableWindow(((Button &) get("buttonSend")).getHwnd(), TRUE);
 			EnableWindow(((Button &) get("buttonDisconnect")).getHwnd(), TRUE);
 			EnableWindow(((TextField &) get("textFieldMessage")).getHwnd(), TRUE);
+
+			SetFocus(((TextField &) get("textFieldMessage")).getHwnd());
 			break;
 		}
 		case 3: {
@@ -69,4 +79,17 @@ void ui::MainWindowComponents::sendMessage() {
 	((TextArea &) get("textAreaChat")).append(text.str());
 
 	((TextField &) get("textFieldMessage")).setText(L"");
+}
+
+LRESULT ui::MainWindowComponents::subEditProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+	switch (msg) {
+		case WM_CHAR: {
+			if (wParam == VK_RETURN) {
+				comPtr->sendMessage();
+				return 0;
+			}
+		}
+		default:
+			return CallWindowProc(comPtr->oldEditProc, hwnd, msg, wParam, lParam);
+	}
 }

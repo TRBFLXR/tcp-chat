@@ -28,6 +28,8 @@ namespace ui {
 
 		virtual void onCreate() { }
 
+		virtual void onKeyDown(WPARAM wParam) {};
+
 	protected:
 		std::unordered_map<std::string, std::unique_ptr<Component>> components;
 
