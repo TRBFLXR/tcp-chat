@@ -18,6 +18,7 @@ Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned
 
 	client->setChatMessageCallback(handleChatMessage);
 	client->setExceptionCallback(handleClientException);
+	client->setLostConnectionCallback(handleLostConnection);
 
 	if (!Config::load(config)) {
 		shouldExit = true;
@@ -42,6 +43,11 @@ int Application::run() {
 	return static_cast<int>(msg.wParam);
 }
 
+void Application::showConfigWindow() {
+	EnableWindow(window.getHwnd(), FALSE);
+	configWindow.setShowCommand(SW_SHOW);
+}
+
 void Application::handleChatMessage(const std::wstring &message, const std::wstring &sender) {
 	std::wstringstream text;
 	text << sender.c_str();
@@ -56,7 +62,7 @@ void Application::handleClientException(const std::exception &ex) {
 	MessageBoxA(appPtr->window.getHwnd(), ex.what(), "Error", MB_OK | MB_ICONERROR);
 }
 
-void Application::showConfigWindow() {
-	EnableWindow(window.getHwnd(), FALSE);
-	configWindow.setShowCommand(SW_SHOW);
+void Application::handleLostConnection() {
+	appPtr->window.getComponents()->onCreate();
+	MessageBox(appPtr->window.getHwnd(), L"Lost connection...", L"Error", MB_OK | MB_ICONERROR);
 }

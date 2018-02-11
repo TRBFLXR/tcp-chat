@@ -138,7 +138,7 @@ bool Server::processPacket(const Connection &connection, PacketType packetType) 
 					c->pm.push(msgPacket);
 				}
 			}
-			wprintf(L"Processed chat message packet from user(%i): %ls\n", connection.id, message.c_str());
+			wprintf(L"Processed message from %ls(%i): %ls\n", connection.name, connection.id, message.c_str());
 			break;
 		}
 		default:

@@ -31,7 +31,7 @@ void ui::MainWindowComponents::input(WPARAM wParam) {
 			break;
 		}
 		case 2: {
-			app->getClient()->connectToServer(gConfig.name, gConfig.ip, gConfig.port);
+			if (!app->getClient()->connectToServer(gConfig.name, gConfig.ip, gConfig.port)) break;
 			EnableWindow(((Button &) get("buttonConnect")).getHwnd(), FALSE);
 			EnableWindow(((Button &) get("buttonSend")).getHwnd(), TRUE);
 			EnableWindow(((Button &) get("buttonDisconnect")).getHwnd(), TRUE);
@@ -60,6 +60,8 @@ void ui::MainWindowComponents::onCreate() {
 	EnableWindow(((Button &) get("buttonDisconnect")).getHwnd(), FALSE);
 
 	((TextField &) get("textFieldMessage")).setFont(L"SansSerif", 18);
+
+	((TextArea &) get("textAreaChat")).setText(L"");
 }
 
 void ui::MainWindowComponents::sendMessage() {

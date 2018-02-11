@@ -21,6 +21,7 @@ namespace ui {
 
 		virtual void setupComponents() = 0;
 
+		inline Components *getComponents() { return components; }
 		inline const HWND &getHwnd() const { return hwnd; }
 		inline const std::wstring &getTitle() const { return title; }
 		Component &get(const std::string_view &componentName) { return components->get(componentName); }

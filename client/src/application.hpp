@@ -28,6 +28,7 @@ public:
 
 	static void handleChatMessage(const std::wstring &sender, const std::wstring &message);
 	static void handleClientException(const std::exception &ex);
+	static void handleLostConnection();
 
 private:
 	static Application *appPtr;

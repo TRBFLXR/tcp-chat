@@ -34,6 +34,7 @@ bool Client::connectToServer(const std::wstring_view &name, const std::string_vi
 	int addrSize = sizeof(addr);
 	if (connect(connection.socket, reinterpret_cast<const SOCKADDR *>(&addr), addrSize) != 0) {
 		showException(connection_error("Failed to connect"));
+		return false;
 	}
 
 	wprintf(L"Connected!\n");
@@ -87,6 +88,8 @@ void Client::clientThreadFunc(Client *client) {
 		if (!client->getPacketType(client->connection, PacketType)) break;
 		if (!client->processPacket(client->connection, PacketType)) break;
 	}
+	client->lostConnectionCallback();
+
 	wprintf(L"Lost connection\n");
 
 	client->terminateThreads = true;

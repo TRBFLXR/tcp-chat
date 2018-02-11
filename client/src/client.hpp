@@ -30,6 +30,10 @@ public:
 	inline void setExceptionCallback(std::function<void(const std::exception&)> callback) {
 		showException = std::move(callback);
 	}
+	
+	inline void setLostConnectionCallback(std::function<void(void)> callback) {
+		lostConnectionCallback = std::move(callback);
+	}
 
 private:
 	bool closeConnection();
@@ -49,6 +53,7 @@ private:
 	std::thread packetSenderThread;
 	std::thread clientThread;
 
+	std::function<void(void)> lostConnectionCallback;
 	std::function<void(const std::wstring &, const std::wstring &)> chatMessageCallback;
 	std::function<void(const std::exception&)> showException;
 };
