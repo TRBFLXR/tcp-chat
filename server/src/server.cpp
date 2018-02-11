@@ -121,6 +121,9 @@ bool Server::processPacket(const Connection &connection, PacketType packetType) 
 		case PacketType::Register: {
 			if (!getString(connection, connection.name)) return false;
 
+			ps::Register r(connection.name);
+			std::shared_ptr<Packet> regPacket = std::make_shared<Packet>(r.toPacket());
+			sendPacketToAll(connection.id, regPacket);
 			break;
 		}
 
@@ -130,15 +133,9 @@ bool Server::processPacket(const Connection &connection, PacketType packetType) 
 
 			ps::ServerChatMessage cm(message, connection.name);
 			std::shared_ptr<Packet> msgPacket = std::make_shared<Packet>(cm.toPacket());
-			{
-				std::shared_lock<std::shared_mutex> lock(connectionMutex);
-				for (auto &&c : connections) {
-					if (c->id == connection.id) continue;
+			sendPacketToAll(connection.id, msgPacket);
 
-					c->pm.push(msgPacket);
-				}
-			}
-			wprintf(L"Processed message from %ls(%i): %ls\n", connection.name, connection.id, message.c_str());
+			wprintf(L"Processed message from %ls(%i): %ls\n", connection.name.c_str(), connection.id, message.c_str());
 			break;
 		}
 		default:
@@ -149,4 +146,11 @@ bool Server::processPacket(const Connection &connection, PacketType packetType) 
 	return true;
 }
 
+void Server::sendPacketToAll(int sender, const std::shared_ptr<Packet> &packet) {
+	std::shared_lock<std::shared_mutex> lock(connectionMutex);
+	for (auto &&c : connections) {
+		if (c->id == sender) continue;
 
+		c->pm.push(packet);
+	}
+}

@@ -23,9 +23,12 @@ public:
 	inline bool shouldClose() const { return shouldExit; }
 	inline void shouldClose(bool close) { shouldExit = close; }
 
+	inline void showLostConnection(bool show) { showLostConnectionMsg = show; }
+
 	inline const ui::MainWindow &getMainWindow() const { return window; }
 	inline Client *getClient() { return client; }
 
+	static void handleNewUser(const std::wstring &name);
 	static void handleChatMessage(const std::wstring &sender, const std::wstring &message);
 	static void handleClientException(const std::exception &ex);
 	static void handleLostConnection();
@@ -34,9 +37,10 @@ private:
 	static Application *appPtr;
 
 	MSG msg;
-	HINSTANCE hInstaice;
+	HINSTANCE hInstance;
 
 	bool shouldExit;
+	bool showLostConnectionMsg;
 
 	Config config;
 	Client *client;

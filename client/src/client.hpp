@@ -23,14 +23,18 @@ public:
 
 	inline bool connected() const { return isConnected; }
 
+	inline void setUserConnectCallback(std::function<void(const std::wstring &)> callback) {
+		userConnectCallback = std::move(callback);
+	}
+
 	inline void setChatMessageCallback(std::function<void(const std::wstring &, const std::wstring &)> callback) {
 		chatMessageCallback = std::move(callback);
 	}
 
-	inline void setExceptionCallback(std::function<void(const std::exception&)> callback) {
+	inline void setExceptionCallback(std::function<void(const std::exception &)> callback) {
 		showException = std::move(callback);
 	}
-	
+
 	inline void setLostConnectionCallback(std::function<void(void)> callback) {
 		lostConnectionCallback = std::move(callback);
 	}
@@ -54,8 +58,9 @@ private:
 	std::thread clientThread;
 
 	std::function<void(void)> lostConnectionCallback;
+	std::function<void(const std::wstring &)> userConnectCallback;
 	std::function<void(const std::wstring &, const std::wstring &)> chatMessageCallback;
-	std::function<void(const std::exception&)> showException;
+	std::function<void(const std::exception &)> showException;
 };
 
 

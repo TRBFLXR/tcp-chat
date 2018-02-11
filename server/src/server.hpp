@@ -13,7 +13,7 @@
 
 #include <socket.hpp>
 
-class Server : public Socket{
+class Server : public Socket {
 public:
 	explicit Server(uint16_t port, bool loopBackToLH = false);
 	~Server();
@@ -21,12 +21,14 @@ public:
 	bool listenConnection();
 
 private:
-	bool processPacket(const Connection &connection, PacketType packetType) override ;
+	bool processPacket(const Connection &connection, PacketType packetType) override;
 
 	static void clientHandlerThread(Server *server, std::shared_ptr<Connection> connection);
 	static void packetSenderThread(Server *server);
 
 	void disconnect(std::shared_ptr<Connection> &connection);
+
+	void sendPacketToAll(int sender, const std::shared_ptr<Packet> &packet);
 
 private:
 	int idCounter;

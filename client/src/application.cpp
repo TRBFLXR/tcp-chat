@@ -11,11 +11,13 @@ Application *Application::appPtr;
 Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned width, unsigned height, int cmd) :
 		window(this, title, app, width, height, cmd),
 		configWindow(this, L"Config", app, 170, 290, SW_HIDE),
-		hInstaice(app),
-		shouldExit(false) {
+		hInstance(app),
+		shouldExit(false),
+		showLostConnectionMsg(true) {
 
 	client = new Client();
 
+	client->setUserConnectCallback(handleNewUser);
 	client->setChatMessageCallback(handleChatMessage);
 	client->setExceptionCallback(handleClientException);
 	client->setLostConnectionCallback(handleLostConnection);
@@ -48,6 +50,15 @@ void Application::showConfigWindow() {
 	configWindow.setShowCommand(SW_SHOW);
 }
 
+void Application::handleNewUser(const std::wstring &name) {
+	std::wstringstream text;
+	text << L"User \n";
+	text << name.c_str();
+	text << L" connected!\n";
+
+	((ui::TextArea &) appPtr->window.get("textAreaChat")).append(text.str());
+}
+
 void Application::handleChatMessage(const std::wstring &message, const std::wstring &sender) {
 	std::wstringstream text;
 	text << sender.c_str();
@@ -64,5 +75,8 @@ void Application::handleClientException(const std::exception &ex) {
 
 void Application::handleLostConnection() {
 	appPtr->window.getComponents()->onCreate();
-	MessageBox(appPtr->window.getHwnd(), L"Lost connection...", L"Error", MB_OK | MB_ICONERROR);
+
+	if (appPtr->showLostConnectionMsg) {
+		MessageBox(appPtr->window.getHwnd(), L"Lost connection...", L"Error", MB_OK | MB_ICONERROR);
+	}
 }
