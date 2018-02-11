@@ -7,8 +7,7 @@
 ui::TextArea::TextArea(const vec2u &pos, const vec2u &size, const HWND &parent, WORD id, DWORD style) :
 		Component(pos, size, parent, id) {
 
-	handle = CreateWindow(L"EDIT", L"",
-	                      WS_CHILD | WS_VISIBLE | style ,
+	handle = CreateWindow(L"EDIT", L"", style,
 	                      pos.x, pos.y, size.x, size.y, parent, reinterpret_cast<HMENU>(id), nullptr, nullptr);
 
 	setFont(L"SansSerif");

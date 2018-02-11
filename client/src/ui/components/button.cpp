@@ -10,7 +10,7 @@ ui::Button::Button(const std::wstring_view &caption, const vec2u &pos, const vec
 		: Component(pos, size, parent, id),
 		  caption(caption) {
 
-	handle = CreateWindow(L"BUTTON", caption.data(), WS_VISIBLE | WS_CHILD | style,
+	handle = CreateWindow(L"BUTTON", caption.data(), style,
 	                      pos.x, pos.y, size.x, size.y, parent, reinterpret_cast<HMENU>(id), nullptr, nullptr);
 
 	setFont(L"SansSerif", 14);

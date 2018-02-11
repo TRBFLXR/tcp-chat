@@ -71,7 +71,20 @@ void ui::ConfigWindowComponents::input(WPARAM wParam) {
 }
 
 void ui::ConfigWindowComponents::onCreate() {
-	((TextField &) get("textFieldName")).setText(L"name");
-	((TextField &) get("textFieldIP")).setText(L"109.87.123.75");
-	((TextField &) get("textFieldPort")).setText(L"1111");
+	if (!app->shouldClose()) {
+		std::wstring w_ip(gConfig.ip.size(), L'#');
+		mbstowcs(&w_ip[0], gConfig.ip.c_str(), gConfig.ip.size());
+
+		((TextField &) get("textFieldName")).setText(gConfig.name);
+		((TextField &) get("textFieldIP")).setText(w_ip);
+		((TextField &) get("textFieldPort")).setText(std::to_wstring(gConfig.port));
+	}
+
+	auto flag = (WPARAM) app->getClient()->connected();
+
+	EnableWindow(((Button &) get("saveButton")).getHwnd(), !flag);
+
+	SendMessage(((TextField &) get("textFieldIP")).getHwnd(), EM_SETREADONLY, flag, 0);
+	SendMessage(((TextField &) get("textFieldPort")).getHwnd(), EM_SETREADONLY, flag, 0);
+	SendMessage(((TextField &) get("textFieldName")).getHwnd(), EM_SETREADONLY, flag, 0);
 }

@@ -18,7 +18,7 @@ namespace ui {
 		~ConfigWindow() override;
 
 		void setupComponents() override;
-
+		void onCreate() override;
 
 	private:
 		static LRESULT inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

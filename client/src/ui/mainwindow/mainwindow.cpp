@@ -39,7 +39,7 @@ ui::MainWindow::MainWindow(Application *application, const std::wstring_view &ti
 
 	windowPtr = this;
 
-	components->onCreate();
+	onCreate();
 }
 
 ui::MainWindow::~MainWindow() { }
@@ -60,6 +60,10 @@ void ui::MainWindow::setupComponents() {
 	AppendMenu(hOptions, MF_STRING, 1003, L"Configure");
 
 	SetMenu(getHwnd(), hMenu);
+}
+
+void ui::MainWindow::onCreate() {
+	components->onCreate();
 }
 
 LRESULT ui::MainWindow::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {

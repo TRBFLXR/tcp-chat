@@ -32,9 +32,9 @@ ui::ConfigWindow::ConfigWindow(Application *application, const std::wstring_view
 	GetWindowRect(parent, &parentRect);
 
 	hwnd = CreateWindow(L"ConfigWindowClass", title.data(),
-	                     WS_OVERLAPPED | WS_CAPTION ,
-	                     parentRect.top, parentRect.left, width, height,
-	                     parent, nullptr, app, nullptr);
+	                    WS_OVERLAPPED | WS_CAPTION,
+	                    parentRect.top, parentRect.left, width, height,
+	                    parent, nullptr, app, nullptr);
 
 	if (!hwnd) throw std::runtime_error("Unable to create window");
 
@@ -44,13 +44,17 @@ ui::ConfigWindow::ConfigWindow(Application *application, const std::wstring_view
 
 	windowPtr = this;
 
-	components->onCreate();
+	onCreate();
 }
 
 ui::ConfigWindow::~ConfigWindow() { }
 
 void ui::ConfigWindow::setupComponents() {
 	components = new ConfigWindowComponents(application, this);
+}
+
+void ui::ConfigWindow::onCreate() {
+	components->onCreate();
 }
 
 LRESULT ui::ConfigWindow::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {

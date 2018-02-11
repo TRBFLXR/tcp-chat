@@ -49,6 +49,7 @@ int Application::run() {
 void Application::showConfigWindow() {
 	EnableWindow(window.getHwnd(), FALSE);
 	configWindow.setShowCommand(SW_SHOW);
+	configWindow.onCreate();
 }
 
 void Application::handleUserConnect(const std::wstring &name) {

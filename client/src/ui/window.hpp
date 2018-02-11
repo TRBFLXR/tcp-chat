@@ -20,6 +20,7 @@ namespace ui {
 		virtual ~Window();
 
 		virtual void setupComponents() = 0;
+		virtual void onCreate() = 0;
 
 		inline Components *getComponents() { return components; }
 		inline const HWND &getHwnd() const { return hwnd; }
