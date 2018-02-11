@@ -4,13 +4,26 @@
 
 #include <packetstructure.hpp>
 
-///Register
-ps::Register::Register(const std::wstring_view &name) : name(name) { }
+///Connect
+ps::Connect::Connect(const std::wstring_view &name) : name(name) { }
 
-std::shared_ptr<Packet> ps::Register::toPacket() {
+std::shared_ptr<Packet> ps::Connect::toPacket() {
 	std::shared_ptr<Packet> p = std::make_shared<Packet>();
 
-	p->append(PacketType::Register);
+	p->append(PacketType::Connect);
+	p->append((int) name.size() * sizeof(wchar_t));
+	p->append(name);
+
+	return p;
+}
+
+///Disconnect
+ps::Disconnect::Disconnect(const std::wstring_view &name) : name(name) { }
+
+std::shared_ptr<Packet> ps::Disconnect::toPacket() {
+	std::shared_ptr<Packet> p = std::make_shared<Packet>();
+
+	p->append(PacketType::Disconnect);
 	p->append((int) name.size() * sizeof(wchar_t));
 	p->append(name);
 

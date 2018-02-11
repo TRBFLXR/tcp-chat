@@ -47,7 +47,7 @@ bool Client::connectToServer(const std::wstring_view &name, const std::string_vi
 	clientThread = std::thread(clientThreadFunc, this);
 	clientThread.detach();
 
-	ps::Register reg(name);
+	ps::Connect reg(name);
 	connection.pm.push(reg.toPacket());
 
 	isConnected = true;
@@ -115,14 +115,20 @@ void Client::packetSenderThreadFunc(Client *client) {
 
 bool Client::processPacket(const Connection &connection, PacketType packetType) {
 	switch (packetType) {
-		case PacketType::Register: {
+		case PacketType::Connect: {
 			std::wstring name;
 			if (!getString(connection, name)) return false;
 
 			userConnectCallback(name);
 			break;
 		}
+		case PacketType::Disconnect: {
+			std::wstring name;
+			if (!getString(connection, name)) return false;
 
+			userDisconnectCallback(name);
+			break;
+		}
 		case PacketType::ServerChatMessage: {
 			std::wstring name;
 			std::wstring message;

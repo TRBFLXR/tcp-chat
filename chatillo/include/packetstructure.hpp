@@ -12,8 +12,15 @@
 
 namespace ps {
 
-	struct Register {
-		explicit Register(const std::wstring_view &name);
+	struct Connect {
+		explicit Connect(const std::wstring_view &name);
+		std::shared_ptr<Packet> toPacket();
+
+		std::wstring name;
+	};
+
+	struct Disconnect {
+		explicit Disconnect(const std::wstring_view &name);
 		std::shared_ptr<Packet> toPacket();
 
 		std::wstring name;

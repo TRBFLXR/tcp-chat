@@ -94,6 +94,10 @@ void Server::clientHandlerThread(Server *server, std::shared_ptr<Connection> con
 		if (!server->processPacket(*connection, packetType)) break;
 	}
 
+	ps::Disconnect d(connection->name);
+	std::shared_ptr<Packet> disconnect = std::make_shared<Packet>(d.toPacket());
+	server->sendPacketToAll(connection->id, disconnect);
+
 	wprintf(L"Client disconnected (id:%i)\n", connection->id);
 	server->disconnect(connection);
 }
@@ -118,10 +122,10 @@ void Server::packetSenderThread(Server *server) {
 
 bool Server::processPacket(const Connection &connection, PacketType packetType) {
 	switch (packetType) {
-		case PacketType::Register: {
+		case PacketType::Connect: {
 			if (!getString(connection, connection.name)) return false;
 
-			ps::Register r(connection.name);
+			ps::Connect r(connection.name);
 			std::shared_ptr<Packet> regPacket = std::make_shared<Packet>(r.toPacket());
 			sendPacketToAll(connection.id, regPacket);
 			break;

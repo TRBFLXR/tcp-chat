@@ -27,6 +27,10 @@ public:
 		userConnectCallback = std::move(callback);
 	}
 
+	inline void setUserDisconnectCallback(std::function<void(const std::wstring &)> callback) {
+		userDisconnectCallback = std::move(callback);
+	}
+
 	inline void setChatMessageCallback(std::function<void(const std::wstring &, const std::wstring &)> callback) {
 		chatMessageCallback = std::move(callback);
 	}
@@ -59,6 +63,7 @@ private:
 
 	std::function<void(void)> lostConnectionCallback;
 	std::function<void(const std::wstring &)> userConnectCallback;
+	std::function<void(const std::wstring &)> userDisconnectCallback;
 	std::function<void(const std::wstring &, const std::wstring &)> chatMessageCallback;
 	std::function<void(const std::exception &)> showException;
 };

@@ -17,7 +17,8 @@ Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned
 
 	client = new Client();
 
-	client->setUserConnectCallback(handleNewUser);
+	client->setUserConnectCallback(handleUserConnect);
+	client->setUserDisconnectCallback(handleUserDisconnect);
 	client->setChatMessageCallback(handleChatMessage);
 	client->setExceptionCallback(handleClientException);
 	client->setLostConnectionCallback(handleLostConnection);
@@ -50,11 +51,20 @@ void Application::showConfigWindow() {
 	configWindow.setShowCommand(SW_SHOW);
 }
 
-void Application::handleNewUser(const std::wstring &name) {
+void Application::handleUserConnect(const std::wstring &name) {
 	std::wstringstream text;
 	text << L"User \n";
 	text << name.c_str();
 	text << L" connected!\n";
+
+	((ui::TextArea &) appPtr->window.get("textAreaChat")).append(text.str());
+}
+
+void Application::handleUserDisconnect(const std::wstring &name) {
+	std::wstringstream text;
+	text << L"User \n";
+	text << name.c_str();
+	text << L" disconnected!\n";
 
 	((ui::TextArea &) appPtr->window.get("textAreaChat")).append(text.str());
 }
