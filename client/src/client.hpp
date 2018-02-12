@@ -43,6 +43,10 @@ public:
 		lostConnectionCallback = std::move(callback);
 	}
 
+	inline void setUsersListCallback(std::function<void(std::vector<std::wstring *> &)> callback) {
+		usersListCallback = std::move(callback);
+	}
+
 private:
 	bool closeConnection();
 	bool processPacket(const Connection &connection, PacketType packetType) override;
@@ -66,6 +70,7 @@ private:
 	std::function<void(const std::wstring &)> userDisconnectCallback;
 	std::function<void(const std::wstring &, const std::wstring &)> chatMessageCallback;
 	std::function<void(const std::exception &)> showException;
+	std::function<void(std::vector<std::wstring *> &)> usersListCallback;
 };
 
 

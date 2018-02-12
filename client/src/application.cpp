@@ -18,11 +18,12 @@ Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned
 
 	client = new Client();
 
-	client->setUserConnectCallback(handleUserConnect);
-	client->setUserDisconnectCallback(handleUserDisconnect);
-	client->setChatMessageCallback(handleChatMessage);
-	client->setExceptionCallback(handleClientException);
-	client->setLostConnectionCallback(handleLostConnection);
+	client->setUserConnectCallback(userConnected);
+	client->setUserDisconnectCallback(userDisconnected);
+	client->setChatMessageCallback(chatMessage);
+	client->setExceptionCallback(clientException);
+	client->setLostConnectionCallback(lostConnection);
+	client->setUsersListCallback(usersList);
 
 	if (!Config::load(config)) {
 		shouldExit = true;
@@ -53,7 +54,7 @@ void Application::showConfigWindow() {
 	configWindow.onCreate();
 }
 
-void Application::handleUserConnect(const std::wstring &name) {
+void Application::userConnected(const std::wstring &name) {
 	std::wstringstream text;
 	text << L"User ";
 	text << name.c_str();
@@ -63,7 +64,7 @@ void Application::handleUserConnect(const std::wstring &name) {
 	((ui::ListBox &) appPtr->window.get("listBoxUsers")).addItem(name);
 }
 
-void Application::handleUserDisconnect(const std::wstring &name) {
+void Application::userDisconnected(const std::wstring &name) {
 	std::wstringstream text;
 	text << L"User ";
 	text << name.c_str();
@@ -73,7 +74,7 @@ void Application::handleUserDisconnect(const std::wstring &name) {
 	((ui::ListBox &) appPtr->window.get("listBoxUsers")).removeItem(name);
 }
 
-void Application::handleChatMessage(const std::wstring &message, const std::wstring &sender) {
+void Application::chatMessage(const std::wstring &message, const std::wstring &sender) {
 	std::wstringstream text;
 	text << sender.c_str();
 	text << L": ";
@@ -83,14 +84,20 @@ void Application::handleChatMessage(const std::wstring &message, const std::wstr
 	((ui::TextArea &) appPtr->window.get("textAreaChat")).append(text.str());
 }
 
-void Application::handleClientException(const std::exception &ex) {
+void Application::clientException(const std::exception &ex) {
 	MessageBoxA(appPtr->window.getHwnd(), ex.what(), "Error", MB_OK | MB_ICONERROR);
 }
 
-void Application::handleLostConnection() {
+void Application::lostConnection() {
 	appPtr->window.getComponents()->onCreate();
 
 	if (appPtr->showLostConnectionMsg) {
 		MessageBox(appPtr->window.getHwnd(), L"Lost connection...", L"Error", MB_OK | MB_ICONERROR);
+	}
+}
+
+void Application::usersList(std::vector<std::wstring *> &users) {
+	for (auto &&u : users) {
+		((ui::ListBox &) appPtr->window.get("listBoxUsers")).addItem(*u);
 	}
 }

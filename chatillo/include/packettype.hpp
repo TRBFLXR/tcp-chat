@@ -10,6 +10,7 @@ enum class PacketType {
 	Disconnect,
 	ChatMessage,
 	ServerChatMessage,
+	UsersList,
 	RequestFile,
 	FileBuffer,
 	NextFileBuffer,

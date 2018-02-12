@@ -30,11 +30,12 @@ public:
 
 	inline const HINSTANCE &getHinstance() const { return hInstance; }
 
-	static void handleUserConnect(const std::wstring &name);
-	static void handleUserDisconnect(const std::wstring &name);
-	static void handleChatMessage(const std::wstring &sender, const std::wstring &message);
-	static void handleClientException(const std::exception &ex);
-	static void handleLostConnection();
+	static void userConnected(const std::wstring &name);
+	static void userDisconnected(const std::wstring &name);
+	static void chatMessage(const std::wstring &sender, const std::wstring &message);
+	static void clientException(const std::exception &ex);
+	static void lostConnection();
+	static void usersList(std::vector<std::wstring *> &users);
 
 private:
 	static Application *appPtr;

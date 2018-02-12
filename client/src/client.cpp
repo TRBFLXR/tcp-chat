@@ -138,6 +138,22 @@ bool Client::processPacket(const Connection &connection, PacketType packetType) 
 			chatMessageCallback(message, name);
 			break;
 		}
+		case PacketType::UsersList: {
+			int size;
+			std::wstring temp;
+			std::vector<std::wstring *> users;
+
+			if (!getInt(connection, size)) return false;
+
+			for (int i = 0; i < size; ++i) {
+				if (!getString(connection, temp)) return false;
+				users.push_back(new std::wstring(temp));
+			}
+
+			usersListCallback(users);
+			users.clear();
+			break;
+		}
 		default:
 			wprintf(L"Unrecognized PacketType: %i\n", packetType);
 			break;

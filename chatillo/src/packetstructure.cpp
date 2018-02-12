@@ -58,3 +58,20 @@ std::shared_ptr<Packet> ps::ServerChatMessage::toPacket() {
 
 	return p;
 }
+
+///ServerChatMessage
+ps::UserList::UserList(std::vector<std::wstring *> &users) : users(users) { }
+
+std::shared_ptr<Packet> ps::UserList::toPacket() {
+	std::shared_ptr<Packet> p = std::make_shared<Packet>();
+
+	p->append(PacketType::UsersList);
+	p->append((int) users.size());
+
+	for (auto &&u : users) {
+		p->append((int) u->size() * sizeof(wchar_t));
+		p->append(*u);
+	}
+
+	return p;
+}

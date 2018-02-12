@@ -56,6 +56,15 @@ bool Server::listenConnection() {
 		return false;
 	}
 
+	//create user list packet
+	std::vector<std::wstring *> users;
+	for (auto &&c : connections) {
+		users.push_back(&c->name);
+	}
+	ps::UserList ul(users);
+	std::shared_ptr<Packet> usersList = std::make_shared<Packet>(ul.toPacket());
+
+	//lock
 	std::lock_guard<std::shared_mutex> lock(connectionMutex);
 
 	std::shared_ptr<Connection> connection(std::make_shared<Connection>(connectionSocket));
@@ -66,10 +75,14 @@ bool Server::listenConnection() {
 
 	wprintf(L"Client connected id:%i\n", connection->id);
 
+	//send users list
+	connection->pm.push(usersList);
+
 	std::thread clientThread(clientHandlerThread, this, connection);
 	clientThread.detach();
 	threads.push_back(&clientThread);
 
+	users.clear();
 	return true;
 }
 

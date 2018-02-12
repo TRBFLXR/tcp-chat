@@ -5,6 +5,7 @@
 #ifndef TCP_CHAT_PACKETSTRUCTURE_HPP
 #define TCP_CHAT_PACKETSTRUCTURE_HPP
 
+#include <vector>
 #include <string>
 #include <memory>
 
@@ -39,6 +40,13 @@ namespace ps {
 
 		std::wstring sender;
 		std::wstring message;
+	};
+
+	struct UserList {
+		explicit UserList(std::vector<std::wstring *> &users);
+		std::shared_ptr<Packet> toPacket();
+
+		std::vector<std::wstring *> users;
 	};
 
 }

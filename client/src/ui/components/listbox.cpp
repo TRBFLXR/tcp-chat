@@ -27,7 +27,8 @@ void ui::ListBox::removeItem(const std::wstring_view &item) const {
 	std::wstring buffer;
 	for (int i = 0; i < count; ++i) {
 		SendMessage(handle, LB_GETTEXT, static_cast<WPARAM>(i), reinterpret_cast<LPARAM>(buffer.data()));
-		if (buffer.compare(item)) {
+
+		if (wcscmp(buffer.c_str(), item.data()) == 0) {
 			SendMessage(handle, LB_DELETESTRING, static_cast<WPARAM>(i), 0);
 			return;
 		}
