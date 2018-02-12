@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG_C=1")
 add_definitions(-DUNICODE)
 
 include_directories(../chatillo/include)
-link_libraries(chatillo)
+link_libraries(chatillo Winmm)
 
 #client
 set(CLIENT_SRC

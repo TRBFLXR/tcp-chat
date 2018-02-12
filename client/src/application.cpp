@@ -75,6 +75,8 @@ void Application::userDisconnected(const std::wstring &name) {
 }
 
 void Application::chatMessage(const std::wstring &message, const std::wstring &sender) {
+	PlaySound(L"msg.wav", nullptr, SND_FILENAME | SND_ASYNC);
+
 	std::wstringstream text;
 	text << sender.c_str();
 	text << L": ";
