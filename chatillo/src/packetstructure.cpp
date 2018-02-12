@@ -75,3 +75,16 @@ std::shared_ptr<Packet> ps::UserList::toPacket() {
 
 	return p;
 }
+
+///ServerChatMessage
+ps::DuplicateName::DuplicateName() {
+
+}
+
+std::shared_ptr<Packet> ps::DuplicateName::toPacket() {
+	std::shared_ptr<Packet> p = std::make_shared<Packet>();
+
+	p->append(PacketType::DuplicateName);
+
+	return p;
+}

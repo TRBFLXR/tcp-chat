@@ -86,15 +86,20 @@ bool Server::listenConnection() {
 	return true;
 }
 
-void Server::disconnect(std::shared_ptr<Connection> &connection) {
+void Server::disconnect(const Connection &connection) {
 	std::lock_guard<std::shared_mutex> lock(connectionMutex);
 
-	connection->pm.clear();
-	closesocket(connection->socket);
+	connection.pm.clear();
+	closesocket(connection.socket);
 
-	connections.erase(std::remove(connections.begin(), connections.end(), connection));
+	//delete from vector
+	for (size_t i = 0; i < connections.size(); ++i) {
+		if (connections[i]->id == connection.id) {
+			connections.erase(connections.begin() + i);
+		}
+	}
 
-	wprintf(L"Cleaned up client %i\n", connection->id);
+	wprintf(L"Cleaned up client %i\n", connection.id);
 	wprintf(L"Total connections: %llu\n", connections.size());
 }
 
@@ -107,12 +112,22 @@ void Server::clientHandlerThread(Server *server, std::shared_ptr<Connection> con
 		if (!server->processPacket(*connection, packetType)) break;
 	}
 
-	ps::Disconnect d(connection->name);
-	std::shared_ptr<Packet> disconnect = std::make_shared<Packet>(d.toPacket());
-	server->sendPacketToAll(connection->id, disconnect);
+	if (connection->selfDisconnect) {
+		ps::Disconnect d(connection->name);
+		std::shared_ptr<Packet> disconnect = std::make_shared<Packet>(d.toPacket());
+		server->sendPacketToAll(connection->id, disconnect);
+	} else {
+		ps::DuplicateName d;
+		Packet dp = *d.toPacket();
+
+		std::shared_lock<std::shared_mutex> lock(server->connectionMutex);
+		if (!server->sendAll(*connection, dp.getBuffer().data(), (int) dp.getBuffer().size())) {
+			fwprintf(stderr, L"Failed to send packet to id:%i\n", connection->id);
+		}
+	}
 
 	wprintf(L"Client disconnected (id:%i)\n", connection->id);
-	server->disconnect(connection);
+	server->disconnect(*connection);
 }
 
 void Server::packetSenderThread(Server *server) {
@@ -137,6 +152,14 @@ bool Server::processPacket(const Connection &connection, PacketType packetType) 
 	switch (packetType) {
 		case PacketType::Connect: {
 			if (!getString(connection, connection.name)) return false;
+
+			for (auto &&c : connections) {
+				if (c->id == connection.id) continue;
+				if (wcscmp(c->name.c_str(), connection.name.c_str()) == 0) {
+					connection.selfDisconnect = false;
+					return false;
+				}
+			}
 
 			ps::Connect r(connection.name);
 			std::shared_ptr<Packet> regPacket = std::make_shared<Packet>(r.toPacket());

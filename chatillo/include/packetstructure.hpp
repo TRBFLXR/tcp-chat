@@ -49,6 +49,11 @@ namespace ps {
 		std::vector<std::wstring *> users;
 	};
 
+	struct DuplicateName {
+		explicit DuplicateName();
+		std::shared_ptr<Packet> toPacket();
+	};
+
 }
 
 #endif //TCP_CHAT_PACKETSTRUCTURE_HPP

@@ -36,7 +36,7 @@ public:
 	}
 
 	inline void setExceptionCallback(std::function<void(const std::exception &)> callback) {
-		showException = std::move(callback);
+		handleException = std::move(callback);
 	}
 
 	inline void setLostConnectionCallback(std::function<void(void)> callback) {
@@ -45,6 +45,10 @@ public:
 
 	inline void setUsersListCallback(std::function<void(std::vector<std::wstring *> &)> callback) {
 		usersListCallback = std::move(callback);
+	}
+
+	inline void setDuplicateNameCallback(std::function<void(void)> callback) {
+		duplicateNameCallback = std::move(callback);
 	}
 
 private:
@@ -69,8 +73,9 @@ private:
 	std::function<void(const std::wstring &)> userConnectCallback;
 	std::function<void(const std::wstring &)> userDisconnectCallback;
 	std::function<void(const std::wstring &, const std::wstring &)> chatMessageCallback;
-	std::function<void(const std::exception &)> showException;
+	std::function<void(const std::exception &)> handleException;
 	std::function<void(std::vector<std::wstring *> &)> usersListCallback;
+	std::function<void(void)> duplicateNameCallback;
 };
 
 

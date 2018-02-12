@@ -24,6 +24,7 @@ Application::Application(const std::wstring_view &title, HINSTANCE app, unsigned
 	client->setExceptionCallback(clientException);
 	client->setLostConnectionCallback(lostConnection);
 	client->setUsersListCallback(usersList);
+	client->setDuplicateNameCallback(onDuplicateName);
 
 	if (!Config::load(config)) {
 		shouldExit = true;
@@ -102,4 +103,9 @@ void Application::usersList(std::vector<std::wstring *> &users) {
 	for (auto &&u : users) {
 		((ui::ListBox &) appPtr->window.get("listBoxUsers")).addItem(*u);
 	}
+}
+
+void Application::onDuplicateName() {
+	appPtr->showLostConnectionMsg = false;
+	MessageBox(appPtr->window.getHwnd(), L"Name already taken", L"Error", MB_OK | MB_ICONERROR);
 }

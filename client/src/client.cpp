@@ -33,7 +33,7 @@ bool Client::connectToServer(const std::wstring_view &name, const std::string_vi
 
 	int addrSize = sizeof(addr);
 	if (connect(connection.socket, reinterpret_cast<const SOCKADDR *>(&addr), addrSize) != 0) {
-		showException(connection_error("Failed to connect"));
+		handleException(connection_error("Failed to connect"));
 		return false;
 	}
 
@@ -104,7 +104,7 @@ void Client::packetSenderThreadFunc(Client *client) {
 			std::shared_ptr<Packet> p = client->connection.pm.pop();
 
 			if (!client->sendAll(client->connection, p->getBuffer().data(), (int) p->getBuffer().size())) {
-				client->showException(packet_error("Failed to send packet"));
+				client->handleException(packet_error("Failed to send packet"));
 			}
 		}
 		Sleep(5);
@@ -152,6 +152,11 @@ bool Client::processPacket(const Connection &connection, PacketType packetType) 
 
 			usersListCallback(users);
 			users.clear();
+			break;
+		}
+		case PacketType::DuplicateName: {
+			disconnect();
+			duplicateNameCallback();
 			break;
 		}
 		default:

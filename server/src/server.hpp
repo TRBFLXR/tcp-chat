@@ -26,7 +26,7 @@ private:
 	static void clientHandlerThread(Server *server, std::shared_ptr<Connection> connection);
 	static void packetSenderThread(Server *server);
 
-	void disconnect(std::shared_ptr<Connection> &connection);
+	void disconnect(const Connection &connection);
 
 	void sendPacketToAll(int sender, const std::shared_ptr<Packet> &packet);
 

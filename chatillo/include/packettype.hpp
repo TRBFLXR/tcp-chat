@@ -11,6 +11,7 @@ enum class PacketType {
 	ChatMessage,
 	ServerChatMessage,
 	UsersList,
+	DuplicateName,
 	RequestFile,
 	FileBuffer,
 	NextFileBuffer,

@@ -16,7 +16,7 @@ public:
 	explicit Packet() = default;
 	explicit Packet(const char *buffer, int size);
 	explicit Packet(const PacketType &packetType);
-	Packet(const std::shared_ptr<Packet> &other);
+	explicit Packet(const std::shared_ptr<Packet> &other);
 
 	void append(const PacketType &packetType);
 	void append(int value);

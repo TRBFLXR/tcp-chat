@@ -15,6 +15,7 @@ struct Connection {
 
 	int id = 0;
 	SOCKET socket{ };
+	mutable bool selfDisconnect = true;
 	mutable std::wstring name;
 	mutable PacketManager pm{ };
 };

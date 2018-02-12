@@ -36,6 +36,7 @@ public:
 	static void clientException(const std::exception &ex);
 	static void lostConnection();
 	static void usersList(std::vector<std::wstring *> &users);
+	static void onDuplicateName();
 
 private:
 	static Application *appPtr;
