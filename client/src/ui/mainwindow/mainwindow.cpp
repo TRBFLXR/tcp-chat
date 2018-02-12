@@ -71,10 +71,14 @@ LRESULT ui::MainWindow::inputProcessor(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 		case WM_COMMAND: {
 			windowPtr->components->input(wParam);
 			switch (LOWORD(wParam)) {
-				case 1001:
-					windowPtr->application->getClient()->disconnect();
-					windowPtr->components->onCreate();
+				case 1001: {
+					if (windowPtr->application->getClient()->connected()) {
+						windowPtr->application->showLostConnection(false);
+						windowPtr->application->getClient()->disconnect();
+						windowPtr->components->onCreate();
+					}
 					break;
+				}
 				case 1002:
 					DestroyWindow(windowPtr->getHwnd());
 					break;

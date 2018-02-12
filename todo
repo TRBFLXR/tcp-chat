@@ -1,4 +1,7 @@
 message beep
 + config window lock when connected
 user list
-line break
++ line break
+
+//server
+server commands (-send / -set port ect)

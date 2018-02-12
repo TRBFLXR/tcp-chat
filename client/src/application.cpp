@@ -54,18 +54,18 @@ void Application::showConfigWindow() {
 
 void Application::handleUserConnect(const std::wstring &name) {
 	std::wstringstream text;
-	text << L"User \n";
+	text << L"User ";
 	text << name.c_str();
-	text << L" connected!\n";
+	text << L" connected!\r\n";
 
 	((ui::TextArea &) appPtr->window.get("textAreaChat")).append(text.str());
 }
 
 void Application::handleUserDisconnect(const std::wstring &name) {
 	std::wstringstream text;
-	text << L"User \n";
+	text << L"User ";
 	text << name.c_str();
-	text << L" disconnected!\n";
+	text << L" disconnected!\r\n";
 
 	((ui::TextArea &) appPtr->window.get("textAreaChat")).append(text.str());
 }
@@ -75,7 +75,7 @@ void Application::handleChatMessage(const std::wstring &message, const std::wstr
 	text << sender.c_str();
 	text << L": ";
 	text << message.c_str();
-	text << "\n";
+	text << "\r\n";
 
 	((ui::TextArea &) appPtr->window.get("textAreaChat")).append(text.str());
 }

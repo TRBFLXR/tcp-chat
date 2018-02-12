@@ -14,7 +14,7 @@ void ui::Components::add(const std::string_view &name, ui::Component *component)
 
 ui::Component &ui::Components::get(const std::string_view &name) {
 	auto c = components.find(name.data());
-	assert(c != components.end() && "Could not find component");
+	assert(c != components.end() && "Could not find component" && name.data());
 
 	return *c->second;
 }

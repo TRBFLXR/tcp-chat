@@ -14,6 +14,9 @@ struct Config {
 
 	std::wstring name;
 
+	static constexpr uint16_t lineWidth = 63;
+	static constexpr uint16_t tabSize = 3;
+
 	static bool load(Config &config);
 	static bool save(const Config &config);
 };
