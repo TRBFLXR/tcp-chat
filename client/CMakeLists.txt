@@ -22,6 +22,7 @@ set(CLIENT_SRC
         src/ui/components/textfield.cpp
         src/ui/components/textarea.cpp
         src/ui/components/label.cpp
+        src/ui/components/listbox.cpp
         src/ui/mainwindow/mainwindow.cpp
         src/ui/mainwindow/mainwindowcomponents.cpp
         src/ui/configwindow/configwindow.cpp

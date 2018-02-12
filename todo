@@ -1,6 +1,6 @@
 message beep
 + config window lock when connected
-user list
++ user list
 + line break
 
 //server

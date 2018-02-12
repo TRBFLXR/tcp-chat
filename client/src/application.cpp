@@ -5,6 +5,7 @@
 #include <sstream>
 #include "application.hpp"
 #include "ui/components/textarea.hpp"
+#include "ui/components/listbox.hpp"
 
 Application *Application::appPtr;
 
@@ -59,6 +60,7 @@ void Application::handleUserConnect(const std::wstring &name) {
 	text << L" connected!\r\n";
 
 	((ui::TextArea &) appPtr->window.get("textAreaChat")).append(text.str());
+	((ui::ListBox &) appPtr->window.get("listBoxUsers")).addItem(name);
 }
 
 void Application::handleUserDisconnect(const std::wstring &name) {
@@ -68,6 +70,7 @@ void Application::handleUserDisconnect(const std::wstring &name) {
 	text << L" disconnected!\r\n";
 
 	((ui::TextArea &) appPtr->window.get("textAreaChat")).append(text.str());
+	((ui::ListBox &) appPtr->window.get("listBoxUsers")).removeItem(name);
 }
 
 void Application::handleChatMessage(const std::wstring &message, const std::wstring &sender) {

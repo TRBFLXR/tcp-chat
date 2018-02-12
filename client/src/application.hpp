@@ -28,6 +28,8 @@ public:
 	inline const ui::MainWindow &getMainWindow() const { return window; }
 	inline Client *getClient() { return client; }
 
+	inline const HINSTANCE &getHinstance() const { return hInstance; }
+
 	static void handleUserConnect(const std::wstring &name);
 	static void handleUserDisconnect(const std::wstring &name);
 	static void handleChatMessage(const std::wstring &sender, const std::wstring &message);

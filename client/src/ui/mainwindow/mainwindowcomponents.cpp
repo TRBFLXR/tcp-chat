@@ -5,17 +5,19 @@
 #include <sstream>
 #include "../../application.hpp"
 #include "mainwindowcomponents.hpp"
+#include "../components/listbox.hpp"
 
 ui::MainWindowComponents *ui::MainWindowComponents::comPtr;
 
 ui::MainWindowComponents::MainWindowComponents(Application *app, Window *parent) : Components(app, parent) {
 	HWND pHwnd = parent->getHwnd();
 
-	add("buttonSend", new Button(L"Send", {505, 410}, {100, 26}, pHwnd, 1));
+	add("buttonSend", new Button(L"Send", {505, 417}, {100, 26}, pHwnd, 1));
 	add("buttonConnect", new Button(L"Connect", {610, 5}, {100, 20}, pHwnd, 2));
 	add("buttonDisconnect", new Button(L"Disconnect", {715, 5}, {100, 20}, pHwnd, 3));
-	add("textAreaChat", new TextArea({5, 5}, {600, 400}, pHwnd, 4, DEFAULT_TEXTAREA_STYLE | ES_READONLY));
-	add("textFieldMessage", new TextField({5, 410}, {495, 26}, pHwnd, 5));
+	add("textAreaChat", new TextArea({5, 5}, {600, 407}, pHwnd, 4, DEFAULT_TEXTAREA_STYLE | ES_READONLY));
+	add("textFieldMessage", new TextField({5, 417}, {495, 26}, pHwnd, 5));
+	add("listBoxUsers", new ListBox({610, 30}, {205, 390}, pHwnd, 6, DEFAULT_LISTBOX_STYLE | LBS_NOSEL));
 
 	oldEditProc = (WNDPROC) SetWindowLongPtr((get("textFieldMessage")).getHwnd(), GWLP_WNDPROC, (LONG_PTR) subEditProc);
 
@@ -66,6 +68,8 @@ void ui::MainWindowComponents::onCreate() {
 	((TextField &) get("textFieldMessage")).setFont(L"SansSerif", 18);
 
 	((TextArea &) get("textAreaChat")).setText(L"");
+
+	((ListBox &) get("listBoxUsers")).clear();
 }
 
 void ui::MainWindowComponents::sendMessage() {
